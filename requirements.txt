@@ -1,0 +1,5 @@
+django
+django-admin-interface
+django-ckeditor-5
+django-recaptcha
+pillow

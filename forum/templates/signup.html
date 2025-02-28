@@ -1,0 +1,169 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up - CyberShield</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        :root {
+            --dark-blue: #0f172a;
+            --midnight: #1e293b;
+            --highlight: #3b82f6;
+        }
+        body {
+            background-color: var(--dark-blue);
+            color: #e2e8f0;
+        }
+        .form-input {
+            background-color: #1e293b;
+            border: 1px solid #334155;
+            color: white;
+        }
+        .form-input:focus {
+            border-color: var(--highlight);
+            outline: none;
+            ring: 2px;
+            ring-color: var(--highlight);
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col">
+    <!-- Header -->
+    <header class="bg-slate-800 py-4 px-6 shadow-lg">
+        <div class="container mx-auto flex justify-between items-center">
+            <a href="/" class="text-2xl md:text-3xl font-bold text-white tracking-wider">CYBERSHIELD</a>
+            <div>
+                <a href="{% url 'login' %}" class="bg-blue-600 hover:bg-blue-700 text-white py-1 px-3 md:py-2 md:px-4 rounded text-sm md:text-base transition-colors">Log In</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="flex-grow container mx-auto px-4 py-8">
+        <div class="max-w-md mx-auto bg-slate-800 rounded-lg overflow-hidden shadow-lg">
+            <div class="px-6 py-8">
+                <h1 class="text-2xl font-bold text-center mb-6">Create Your Account</h1>
+                
+                <form method="post" enctype="multipart/form-data" class="space-y-6">
+                    {% csrf_token %}
+                    
+                    {% if form.non_field_errors %}
+                    <div class="bg-red-900/50 border border-red-500 text-red-100 px-4 py-3 rounded">
+                        {% for error in form.non_field_errors %}
+                            <p>{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                    
+                    <div>
+                        <label for="{{ form.username.id_for_label }}" class="block text-sm font-medium mb-1">Username</label>
+                        {{ form.username }}
+                        {% if form.username.errors %}
+                            <p class="text-red-400 text-xs mt-1">{{ form.username.errors.0 }}</p>
+                        {% endif %}
+                    </div>
+                    
+                    <div>
+                        <label for="{{ form.email.id_for_label }}" class="block text-sm font-medium mb-1">Email</label>
+                        {{ form.email }}
+                        {% if form.email.errors %}
+                            <p class="text-red-400 text-xs mt-1">{{ form.email.errors.0 }}</p>
+                        {% endif %}
+                    </div>
+                    
+                    <div>
+                        <label for="{{ form.password1.id_for_label }}" class="block text-sm font-medium mb-1">Password</label>
+                        {{ form.password1 }}
+                        {% if form.password1.errors %}
+                            <p class="text-red-400 text-xs mt-1">{{ form.password1.errors.0 }}</p>
+                        {% endif %}
+                        <p class="text-xs text-gray-400 mt-1">Your password must be at least 8 characters long and contain letters and numbers.</p>
+                    </div>
+                    
+                    <div>
+                        <label for="{{ form.password2.id_for_label }}" class="block text-sm font-medium mb-1">Confirm Password</label>
+                        {{ form.password2 }}
+                        {% if form.password2.errors %}
+                            <p class="text-red-400 text-xs mt-1">{{ form.password2.errors.0 }}</p>
+                        {% endif %}
+                    </div>
+                    
+                    <div>
+                        <label for="{{ form.bio.id_for_label }}" class="block text-sm font-medium mb-1">Bio (Optional)</label>
+                        {{ form.bio }}
+                        {% if form.bio.errors %}
+                            <p class="text-red-400 text-xs mt-1">{{ form.bio.errors.0 }}</p>
+                        {% endif %}
+                    </div>
+                    
+                    <div>
+                        <label for="{{ form.profile_pic.id_for_label }}" class="block text-sm font-medium mb-1">Profile Picture (Optional)</label>
+                        <div class="flex items-center space-x-2">
+                            <label class="w-full flex items-center justify-center px-4 py-2 border border-gray-600 rounded-lg cursor-pointer bg-gray-700 hover:bg-gray-600 transition-colors">
+                                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path>
+                                </svg>
+                                <span>Choose File</span>
+                                {{ form.profile_pic }}
+                            </label>
+                        </div>
+                        <p id="file-name" class="text-xs text-gray-400 mt-1">No file chosen</p>
+                        {% if form.profile_pic.errors %}
+                            <p class="text-red-400 text-xs mt-1">{{ form.profile_pic.errors.0 }}</p>
+                        {% endif %}
+                    </div>
+                    
+                    <div>
+                        <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-md font-medium transition-colors">
+                            Create Account
+                        </button>
+                    </div>
+                </form>
+            </div>
+            
+            <div class="px-6 py-4 bg-slate-700/50 border-t border-slate-700">
+                <p class="text-sm text-center text-slate-300">
+                    Already have an account? <a href="{% url 'login' %}" class="text-blue-400 hover:text-blue-300">Log in here</a>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-slate-800 py-6 px-4">
+        <div class="container mx-auto">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="mb-6 md:mb-0">
+                    <p class="text-sm text-gray-400">&copy; 2025 CyberShield. All rights reserved.</p>
+                </div>
+                <div class="flex space-x-6">
+                    <a href="{% url 'terms_conditions' %}" class="text-sm text-gray-400 hover:text-white transition-colors">Terms & Conditions</a>
+                    <a href="{% url 'moderator_form' %}" class="text-sm text-gray-400 hover:text-white transition-colors">Become a Moderator</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        $(document).ready(function() {
+            // Add styling to Django form elements
+            $('#id_username, #id_email, #id_password1, #id_password2').addClass('form-input w-full px-3 py-2 rounded-md');
+            $('#id_bio').addClass('form-input w-full px-3 py-2 rounded-md h-24');
+            $('#id_profile_pic').addClass('hidden');
+            
+            // Show filename when a file is selected
+            $('#id_profile_pic').change(function() {
+                const fileName = $(this).val().split('\\').pop();
+                if (fileName) {
+                    $('#file-name').text(fileName);
+                } else {
+                    $('#file-name').text('No file chosen');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
