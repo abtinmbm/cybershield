@@ -61,16 +61,16 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "cybershield_project.wsgi.application"
 
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.mysql",
-        "NAME": "CyberShieldDB",
-        "USER": "root",
-        "PASSWORD": "wut8402hb",
-        "HOST": "localhost",
-        "PORT": "3306",
-    }
-}
+# DATABASES = {
+#     "default": {
+#         "ENGINE": "django.db.backends.mysql",
+#         "NAME": "CyberShieldDB",
+#         "USER": "root",
+#         "PASSWORD": "wut8402hb",
+#         "HOST": "localhost",
+#         "PORT": "3306",
+#     }
+# }
 
 AUTH_USER_MODEL = "forum.CustomUser"
 
