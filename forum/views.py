@@ -348,7 +348,6 @@ def add_comment(request, discussion_id):
 
 
 # Add a new view for displaying a specific discussion with its comments
-@login_required
 def view_discussion(request, discussion_id):
     # Get the discussion object or return 404 if not found
     discussion = get_object_or_404(ForumPost, id=discussion_id)
@@ -356,19 +355,18 @@ def view_discussion(request, discussion_id):
     # Get comments/replies for this post
     replies = ForumReply.objects.filter(post=discussion).order_by('created_at')
     
+    # Add a context variable to identify if user is authenticated (for templates to use)
+    context = {
+        "discussion": discussion, 
+        "replies": replies,
+        "is_authenticated": request.user.is_authenticated
+    }
+    
     # Render the discussion detail template with context data
-    return render(
-        request,
-        'discussion_detail.html',  # Use standard template name (no path prefix)
-        {
-            "discussion": discussion, 
-            "replies": replies
-        }
-    )
+    return render(request, 'discussion_detail.html', context)
 
 # View user profile
 def user_profile(request, username):
-    # Get the user by username
     profile_user = get_object_or_404(CustomUser, username=username)
     
     # Determine if user is a moderator
@@ -393,8 +391,25 @@ def user_profile(request, username):
             pass
     
     # Get user's posts and replies
-    user_posts = ForumPost.objects.filter(author=profile_user).order_by('-created_at')
-    user_replies = ForumReply.objects.filter(author=profile_user).order_by('-created_at')
+    all_user_posts = ForumPost.objects.filter(author=profile_user).order_by('-created_at')
+    user_replies = ForumReply.objects.filter(author=profile_user).order_by('-created_at')[:5]
+    
+    # Calculate total likes received
+    total_likes = 0
+    for post in all_user_posts:
+        total_likes += post.likes.count()
+    
+    for reply in ForumReply.objects.filter(author=profile_user):
+        total_likes += reply.likes.count()
+    
+    # Get post count before slicing
+    post_count = all_user_posts.count()
+    
+    # Determine if we should show "view all" button (if more than 5 posts)
+    show_all_posts_button = post_count > 5
+    
+    # Limit posts for display
+    user_posts = all_user_posts[:5]
     
     context = {
         'profile_user': profile_user,
@@ -402,7 +417,10 @@ def user_profile(request, username):
         'profile_pic': profile_pic,
         'moderator_data': moderator_data,
         'user_posts': user_posts,
+        'post_count': post_count,  # Pass the post count separately
         'user_replies': user_replies,
+        'total_likes': total_likes,
+        'show_all_posts_button': show_all_posts_button
     }
     
     return render(request, 'user_profile.html', context)
@@ -491,3 +509,80 @@ def vote_reply(request):
             return JsonResponse({'status': 'error', 'message': 'Reply not found'}, status=404)
             
     return JsonResponse({'status': 'error', 'message': 'Invalid request'}, status=400)
+
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib import messages
+from django.contrib.auth import update_session_auth_hash
+from django.contrib.auth.forms import PasswordChangeForm
+from .models import CustomUser, ForumPost
+
+# User profile view
+def user_profile(request, username):
+    profile_user = get_object_or_404(CustomUser, username=username)
+    
+    # Get user's posts and activity
+    all_user_posts = ForumPost.objects.filter(author=profile_user).order_by('-created_at')
+    user_replies = ForumReply.objects.filter(author=profile_user).order_by('-created_at')[:5]
+    
+    # Calculate total likes received
+    total_likes = 0
+    for post in all_user_posts:
+        total_likes += post.likes.count()
+    
+    for reply in ForumReply.objects.filter(author=profile_user):
+        total_likes += reply.likes.count()
+    
+    # Get post count before slicing
+    post_count = all_user_posts.count()
+    
+    # Determine if we should show "view all" button (if more than 5 posts)
+    show_all_posts_button = post_count > 5
+    
+    # Limit posts for display
+    user_posts = all_user_posts[:5]
+    
+    return render(request, 'user_profile.html', {
+        'profile_user': profile_user,
+        'user_posts': user_posts,
+        'post_count': post_count,  # Pass the post count separately
+        'user_replies': user_replies,
+        'total_likes': total_likes,
+        'show_all_posts_button': show_all_posts_button
+    })
+
+# Edit profile view
+@login_required
+def edit_profile(request):
+    if request.method == 'POST':
+        bio = request.POST.get('bio', '')
+        profile_pic = request.FILES.get('profile_picture', None)
+        
+        user = request.user
+        user.bio = bio
+        
+        if profile_pic:
+            user.profile_picture = profile_pic
+            
+        user.save()
+        messages.success(request, 'Your profile has been updated successfully.')
+        return redirect('user_profile', username=user.username)
+        
+    return render(request, 'edit_profile.html')
+
+# Change password view
+@login_required
+def change_password(request):
+    if request.method == 'POST':
+        form = PasswordChangeForm(request.user, request.POST)
+        if form.is_valid():
+            user = form.save()
+            update_session_auth_hash(request, user)  # Keep the user logged in
+            messages.success(request, 'Your password was successfully updated!')
+            return redirect('user_profile', username=user.username)
+        else:
+            messages.error(request, 'Please correct the error below.')
+    else:
+        form = PasswordChangeForm(request.user)
+    
+    return render(request, 'change_password.html', {'form': form})

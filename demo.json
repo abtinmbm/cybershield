@@ -13,7 +13,8 @@
       "is_staff": false,
       "is_active": true,
       "date_joined": "2024-01-01T12:00:00Z",
-      "role": "user"
+      "role": "user",
+      "bio": "Security analyst with a passion for cybersecurity. Currently pursuing certifications in CEH and OSCP."
     }
   },
   {
@@ -30,7 +31,9 @@
       "is_staff": false,
       "is_active": true,
       "date_joined": "2024-01-01T12:00:00Z",
-      "role": "user"
+      "role": "user",
+      "bio": "Cybersecurity enthusiast with a focus on network security and penetration testing."
+       
     }
   },
   {
@@ -47,7 +50,9 @@
       "is_staff": true,
       "is_active": true,
       "date_joined": "2024-01-01T12:00:00Z",
-      "role": "moderator"
+      "role": "moderator",
+      "bio": "Experienced security professional with 10+ years in cybersecurity. Certified in CISSP and CEH.",
+      "profile_pic": "carol.jpg"
     }
   },
   {

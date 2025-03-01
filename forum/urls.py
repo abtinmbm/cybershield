@@ -19,6 +19,8 @@ from .views import (
     user_profile,
     vote_post,
     vote_reply,
+    edit_profile,
+    change_password,
 )
 
 urlpatterns = [
@@ -43,4 +45,8 @@ urlpatterns = [
     path("user/<str:username>/", user_profile, name="user_profile"),
     path('vote/post/', vote_post, name='vote_post'),
     path('vote/reply/', vote_reply, name='vote_reply'),
+    # FIX: Reorder these URLs so specific patterns come before the catch-all username pattern
+    path('profile/edit/', edit_profile, name='edit_profile'),
+    path('profile/change-password/', change_password, name='change_password'),
+    path('profile/<str:username>/', user_profile, name='user_profile'),
 ]

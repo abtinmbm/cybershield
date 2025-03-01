@@ -11,7 +11,9 @@ ROLE_CHOICES = [
 
 
 class CustomUser(AbstractUser):
-    role = models.CharField(max_length=10, choices=ROLE_CHOICES, default="user")
+    role = models.CharField(max_length=20, choices=[('user', 'Regular User'), ('moderator', 'Moderator')], default='user')
+    bio = models.TextField(max_length=500, blank=True)
+    profile_picture = models.ImageField(upload_to='profile_pics/', blank=True, null=True)
     groups = models.ManyToManyField(
         Group,
         related_name="customuser_groups",  # Unique related name

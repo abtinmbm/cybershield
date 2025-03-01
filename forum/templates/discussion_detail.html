@@ -263,7 +263,18 @@
                 </div>
                 {% endif %}
                 
-               
+                {% if user.is_authenticated %}
+                <!-- Show voting buttons and reply form -->
+                {% else %}
+                <!-- Show login prompt -->
+                <div class="mt-4 p-4 bg-slate-700 rounded-lg">
+                    <p class="text-center">
+                        <a href="{% url 'login' %}?next={{ request.path }}" class="text-blue-400 hover:text-blue-300">
+                            Log in
+                        </a> to participate in this discussion.
+                    </p>
+                </div>
+                {% endif %}
               </div>
             </div>
           {% endfor %}

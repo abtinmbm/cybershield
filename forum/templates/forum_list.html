@@ -288,6 +288,11 @@
               >Welcome, {{ user.username }}</span
             >
             <a
+              href="{% url 'user_profile' user.username %}"
+              class="text-gray-300 hover:text-white mr-4"
+              >My Profile</a
+            >
+            <a
               href="{% url 'create_forum' %}"
               class="bg-blue-600 hover:bg-blue-700 text-white py-1 px-3 md:py-2 md:px-4 rounded text-sm md:text-base transition-colors"
             >

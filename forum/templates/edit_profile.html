@@ -1,0 +1,207 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Edit Profile | CyberShield</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+      :root {
+        --dark-blue: #0f172a;
+        --midnight: #1e293b;
+        --highlight: #3b82f6;
+      }
+      body {
+        background-color: var(--dark-blue);
+        color: #e2e8f0;
+      }
+      .profile-picture-preview {
+        width: 150px;
+        height: 150px;
+        overflow: hidden;
+        border-radius: 50%;
+        margin: 0 auto;
+        background-color: var(--midnight);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .profile-picture-preview img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+    </style>
+  </head>
+  <body class="min-h-screen flex flex-col">
+    <!-- Header -->
+    <header class="bg-slate-800 py-4 px-6 shadow-lg sticky top-0 z-10">
+      <div class="container mx-auto flex justify-between items-center">
+        <a
+          href="/"
+          class="text-2xl md:text-3xl font-bold text-white tracking-wider"
+          >CYBERSHIELD</a
+        >
+        <div class="flex items-center space-x-4">
+          {% if user.is_authenticated %}
+          <div class="flex items-center">
+            <span class="hidden md:inline mr-2 text-gray-300"
+              >Welcome, {{ user.username }}</span
+            >
+            <a
+              href="{% url 'user_profile' user.username %}"
+              class="text-gray-300 hover:text-white mr-4"
+              >My Profile</a
+            >
+            <a
+              href="{% url 'create_forum' %}"
+              class="bg-blue-600 hover:bg-blue-700 text-white py-1 px-3 md:py-2 md:px-4 rounded text-sm md:text-base transition-colors"
+            >
+              New Post
+            </a>
+            <a
+              href="{% url 'logout' %}"
+              class="ml-2 text-gray-300 hover:text-white"
+              >Logout</a
+            >
+          </div>
+          {% else %}
+          <div>
+            <a
+              href="{% url 'login' %}"
+              class="text-gray-300 hover:text-white mr-4"
+              >Login</a
+            >
+            <a
+              href="{% url 'signup' %}"
+              class="bg-blue-600 hover:bg-blue-700 text-white py-1 px-3 md:py-2 md:px-4 rounded text-sm md:text-base transition-colors"
+              >Sign Up</a
+            >
+          </div>
+          {% endif %}
+        </div>
+      </div>
+    </header>
+
+    <main class="container mx-auto flex-grow py-6 px-4 md:px-6">
+      <div class="max-w-2xl mx-auto">
+        <div class="bg-slate-800 rounded-lg shadow-lg mb-6">
+          <div class="bg-slate-700 p-4 rounded-t-lg">
+            <h1 class="text-2xl font-bold text-white">Edit Profile</h1>
+          </div>
+          
+          <div class="p-6">
+            {% if messages %}
+              {% for message in messages %}
+                <div class="p-4 mb-4 {% if message.tags == 'success' %}bg-green-700{% elif message.tags == 'error' %}bg-red-700{% else %}bg-blue-700{% endif %} rounded-md">
+                  {{ message }}
+                </div>
+              {% endfor %}
+            {% endif %}
+            
+            <form method="post" enctype="multipart/form-data" class="space-y-6">
+              {% csrf_token %}
+              
+              <!-- Profile Picture -->
+              <div>
+                <label class="block text-white text-sm font-bold mb-2">Profile Picture</label>
+                <div class="profile-picture-preview mb-3">
+                  {% if user.profile_picture %}
+                    <img id="profile-preview" src="{{ user.profile_picture.url }}" alt="{{ user.username }}">
+                  {% else %}
+                    <div id="profile-placeholder" class="w-full h-full flex items-center justify-center text-5xl text-slate-400">
+                      {{ user.username.0|upper }}
+                    </div>
+                    <img id="profile-preview" src="" alt="{{ user.username }}" class="hidden">
+                  {% endif %}
+                </div>
+                <div class="flex justify-center">
+                  <label for="id_profile_picture" class="cursor-pointer bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded transition-colors">
+                    Choose Image
+                    <input id="id_profile_picture" name="profile_picture" type="file" class="hidden" accept="image/*">
+                  </label>
+                </div>
+              </div>
+              
+              <!-- Bio -->
+              <div>
+                <label for="id_bio" class="block text-white text-sm font-bold mb-2">Bio</label>
+                <textarea
+                  id="id_bio"
+                  name="bio"
+                  rows="5"
+                  class="w-full bg-slate-700 text-white border border-slate-600 rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  placeholder="Tell us about yourself..."
+                >{{ user.bio }}</textarea>
+              </div>
+              
+              <!-- Submit Button -->
+              <div class="flex justify-between">
+                <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white py-2 px-6 rounded transition-colors">
+                  Save Changes
+                </button>
+                <a href="{% url 'change_password' %}" class="bg-slate-600 hover:bg-slate-700 text-white py-2 px-6 rounded transition-colors">
+                  Change Password
+                </a>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-slate-800 py-8 px-6 mt-12">
+      <div class="container mx-auto">
+        <div class="flex flex-col md:flex-row justify-between items-center">
+          <div class="mb-6 md:mb-0">
+            <h2 class="text-xl font-bold text-white mb-2">CYBERSHIELD</h2>
+            <p class="text-slate-400">
+              Your secure space for cybersecurity discussions
+            </p>
+          </div>
+          <div
+            class="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-8"
+          >
+            <a
+              href="{% url 'terms_conditions' %}"
+              class="text-slate-400 hover:text-white"
+              >Terms & Conditions</a
+            >
+            <a
+              href="{% url 'moderator_form' %}"
+              class="text-slate-400 hover:text-white"
+              >Become a Moderator</a
+            >
+          </div>
+        </div>
+        <div class="mt-8 pt-6 border-t border-slate-700 text-center">
+          <p class="text-slate-500">
+            &copy; {% now "Y" %} CyberShield. All rights reserved.
+          </p>
+        </div>
+      </div>
+    </footer>
+
+    <script>
+      $(document).ready(function() {
+        // Image preview functionality
+        $('#id_profile_picture').change(function() {
+          const file = this.files[0];
+          if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+              $('#profile-placeholder').addClass('hidden');
+              $('#profile-preview').attr('src', e.target.result).removeClass('hidden');
+            }
+            reader.readAsDataURL(file);
+          }
+        });
+      });
+    </script>
+  </body>
+</html>
