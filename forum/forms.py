@@ -12,6 +12,7 @@ class UserCreationForm(forms.ModelForm):
     password2 = forms.CharField(widget=forms.PasswordInput(), label="Confirm Password")
     bio = forms.CharField(widget=forms.Textarea(), required=False)
     profile_pic = forms.ImageField(required=False)
+    captcha = ReCaptchaField(widget=ReCaptchaV2Checkbox())
 
     class Meta:
         model = CustomUser  # Changed from User to CustomUser
@@ -43,6 +44,12 @@ class UserCreationForm(forms.ModelForm):
         return user
 
 
+class LoginForm(forms.Form):
+    username = forms.CharField(max_length=150)
+    password = forms.CharField(widget=forms.PasswordInput())
+    captcha = ReCaptchaField(widget=ReCaptchaV2Checkbox())
+
+
 class ModeratorCreationForm(forms.ModelForm):
     username = forms.CharField(max_length=150)
     email = forms.EmailField()
@@ -56,6 +63,7 @@ class ModeratorCreationForm(forms.ModelForm):
         required=True, help_text="List your relevant cybersecurity certifications"
     )
     agree_terms = forms.BooleanField(required=True)
+    captcha = ReCaptchaField(widget=ReCaptchaV2Checkbox())
     
     class Meta:
         model = Moderator

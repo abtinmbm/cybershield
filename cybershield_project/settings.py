@@ -100,8 +100,8 @@ STATICFILES_DIRS = [os.path.join(BASE_DIR, "static")]
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 # django-recaptcha settings (replace with your actual keys)
-RECAPTCHA_PUBLIC_KEY = "6Le1y-IqAAAAAL78D3QO8lkLTRy7IDS7CCPdFnOz"
-RECAPTCHA_PRIVATE_KEY = "6Le1y-IqAAAAAP9K6_Gr8v7Yp_XShGY0a--JWgrv"
+RECAPTCHA_PUBLIC_KEY = "6LecF-YqAAAAAMFhyCJZgi7o-jxcO4sH8oCVG9su"
+RECAPTCHA_PRIVATE_KEY = "6LecF-YqAAAAAG_kRwtekfS1NgfnHJ8tAuQP6cPp"
 NOCAPTCHA = True
 
 # Set the media root and URL

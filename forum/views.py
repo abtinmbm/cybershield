@@ -11,7 +11,7 @@ from .models import (
     Comment,
     Discussion,
 )
-from .forms import UserCreationForm, ModeratorCreationForm, CreateForumPostForm
+from .forms import UserCreationForm, ModeratorCreationForm, CreateForumPostForm, LoginForm
 from django.contrib.auth.models import User, Group
 from django.contrib.auth import login as auth_login, logout as auth_logout, authenticate
 from django.db import IntegrityError, transaction
@@ -131,50 +131,38 @@ def signup(request):
 # View to handle login page
 def login_view(request):
     if request.method == "POST":
-        username = request.POST.get("username")
-        password = request.POST.get("password")
+        form = LoginForm(request.POST)
+        if form.is_valid():
+            username = form.cleaned_data['username']
+            password = form.cleaned_data['password']
 
-        user = authenticate(username=username, password=password)
+            user = authenticate(username=username, password=password)
 
-        if user is not None:
-            # Check if the user has a pending or suspended moderator account
-            try:
-                moderator = Moderator.objects.get(username=user)
-                if moderator.status == "pending":
-                    return render(
-                        request,
-                        "login.html",
-                        {
-                            "error": "Your moderator application is pending approval. You'll receive an email when it's approved.",
-                            "username": username,
-                        },
-                    )
-                elif moderator.status == "suspended":
-                    return render(
-                        request,
-                        "login.html",
-                        {
-                            "error": "Your moderator account has been suspended. Please contact the administration for more information.",
-                            "username": username,
-                        },
-                    )
-            except Moderator.DoesNotExist:
-                # Not a moderator, proceed with login
-                pass
-                
-            auth_login(request, user)
-            return redirect("forum_list")
-        else:
-            return render(
-                request,
-                "login.html",
-                {
-                    "error": "Invalid username or password. Please try again.",
-                    "username": username,  # Preserve the username so user doesn't have to retype
-                },
-            )
+            if user is not None:
+                # Check if the user has a pending or suspended moderator account
+                try:
+                    moderator = Moderator.objects.get(username=user)
+                    if moderator.status == "pending":
+                        form.add_error(None, "Your moderator application is pending approval. You'll receive an email when it's approved.")
+                        return render(request, "login.html", {"form": form})
+                    elif moderator.status == "suspended":
+                        form.add_error(None, "Your moderator account has been suspended. Please contact the administration for more information.")
+                        return render(request, "login.html", {"form": form})
+                except Moderator.DoesNotExist:
+                    # Not a moderator, proceed with login
+                    pass
+                    
+                auth_login(request, user)
+                return redirect("forum_list")
+            else:
+                form.add_error(None, "Invalid username or password. Please try again.")
+        
+        # If form is not valid or authentication failed
+        return render(request, "login.html", {"form": form})
+    else:
+        form = LoginForm()
 
-    return render(request, "login.html")
+    return render(request, "login.html", {"form": form})
 
 
 def logout_view(request):
