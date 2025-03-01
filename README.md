@@ -2,7 +2,6 @@
 
 ## Table of Contents
 - [About the Project](#about-the-project)
-- [Built With](#built-with)
 - [Getting Started](#getting-started)
 - [Usage](#usage)
 - [APIs and Libraries](#apis-and-libraries)
@@ -12,13 +11,6 @@
 
 ## About the Project
 CyberShield is a security forum designed to provide a secure space for cybersecurity discussions. Users can create posts, comment on discussions, and vote on posts and comments. The forum includes features such as sorting posts by various criteria, filtering by topics, and a responsive design for mobile and desktop users.
-
-## Built With
-- [Django](https://www.djangoproject.com/) - The web framework used
-- [Tailwind CSS](https://tailwindcss.com/) - For styling
-- [jQuery](https://jquery.com/) - For DOM manipulation
-- [Fuse.js](https://fusejs.io/) - For search functionality
-- [AWS CloudFront](https://aws.amazon.com/cloudfront/) - For global hosting
 
 ## Getting Started
 To get a local copy up and running follow these simple steps.
@@ -63,8 +55,8 @@ Enjoy using CyberShield for your cybersecurity discussions!
 
 ## APIs and Libraries
 CyberShield leverages several APIs and libraries to enhance its functionality:
-- **jQuery**: Used for DOM manipulation and handling AJAX requests for dynamic content updates.
-- **Fuse.js**: Provides efficient search functionality within the forum.
+- [jQuery](https://jquery.com/): Used for DOM manipulation and handling AJAX requests for dynamic content updates.
+- [Fuse.js](https://fusejs.io/): Provides efficient search functionality within the forum.
 - **Django REST Framework**: Utilized for creating APIs to handle data interactions between the frontend and backend.
 
 ## Authentication
@@ -77,9 +69,9 @@ CyberShield uses Django's built-in authentication system to manage user registra
 - **Community Features**: Introducing features like user badges, reputation points, and private messaging to foster community engagement.
 
 ## Tech Stack Explanation
-- **Django**: Chosen for its robust framework and ease of use in building secure web applications.
-- **Tailwind CSS**: Provides a utility-first approach to styling, making it easy to create responsive and modern designs.
+- [Django](https://www.djangoproject.com/): Chosen for its robust framework and ease of use in building secure web applications.
+- [Tailwind CSS](https://tailwindcss.com/): Provides a utility-first approach to styling, making it easy to create responsive and modern designs.
 - **SQLite**: Used as the database for development due to its simplicity and ease of setup. Can be replaced with more scalable options like PostgreSQL for production.
-- **AWS CloudFront**: Ensures global content delivery with low latency and high transfer speeds.
+- [AWS CloudFront](https://aws.amazon.com/cloudfront/): Ensures global content delivery with low latency and high transfer speeds.
 
 ![CyberShield](media/CyberShield.png)
