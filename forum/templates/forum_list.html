@@ -405,7 +405,18 @@
               <div class="p-4">
                 <div class="flex justify-between items-start">
                   <h2 class="text-xl font-semibold flex-grow">{{ post.title }}</h2>
-                  <span class="bg-slate-700 text-xs px-2 py-1 rounded ml-2">{{ post.forum_tag.name }}</span>
+                  <div class="flex items-center space-x-2">
+                    <span class="bg-slate-700 text-xs px-2 py-1 rounded">{{ post.forum_tag.name }}</span>
+                    {% if user.is_authenticated and user == post.author or user.role == 'moderator' or user.is_staff %}
+                    <a href="{% url 'delete_discussion' post.id %}" 
+                       onclick="return confirm('Are you sure you want to delete this post?')" 
+                       class="text-red-400 hover:text-red-300">
+                      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                      </svg>
+                    </a>
+                    {% endif %}
+                  </div>
                 </div>
                 <div
                   class="flex justify-between items-center mt-4 text-sm text-slate-400"
@@ -526,9 +537,18 @@
                               </a>
                             {% endif %}
                           </p>
-                          <span class="text-xs text-slate-400"
-                            >{{ reply.created_at|date:"M d, Y" }}</span
-                          >
+                          <div class="flex items-center space-x-2">
+                            <span class="text-xs text-slate-400">{{ reply.created_at|date:"M d, Y" }}</span>
+                            {% if user.is_authenticated and user == reply.author or user.role == 'moderator' or user.is_staff %}
+                            <a href="{% url 'delete_comment' reply.id %}" 
+                               onclick="return confirm('Are you sure you want to delete this comment?')" 
+                               class="text-red-400 hover:text-red-300">
+                              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                              </svg>
+                            </a>
+                            {% endif %}
+                          </div>
                         </div>
                         <p class="mt-1 text-slate-300">{{ reply.content }}</p>
                         <div
@@ -710,16 +730,37 @@
                                       ${response.author}
                                     </a>
                                   </p>
-                                  <span class="text-xs text-slate-400">Just now</span>
+                                  <div class="flex items-center space-x-2">
+                                      <span class="text-xs text-slate-400">Just now</span>
+                                      <a href="/comment/${response.reply_id}/delete/" 
+                                         onclick="return confirm('Are you sure you want to delete this comment?')" 
+                                         class="text-red-400 hover:text-red-300">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                        </svg>
+                                      </a>
+                                  </div>
                               </div>
-                              <div class="mt-1 text-slate-300 prose prose-invert prose-sm max-w-none">${content}</div>
+                              <div class="mt-1 text-slate-300">${content}</div>
                               <div class="flex items-center mt-2 text-xs text-slate-400">
-                                  <button class="flex items-center mr-3 hover:text-green-500">
-                                      <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V5a2 2 0 00-2-2h-.095c-.5 0-.905.405-.905.905 0 .714-.211 1.412-.608 2.006L7 11v9m7-10h-2M7 20H5a2 2 0 01-2-2v-6a2 2 0 012-2h2.5" />
-                                      </svg>
-                                      0
-                                  </button>
+                                  <div class="flex items-center space-x-2">
+                                      <button class="vote-button upvote"
+                                              data-reply-id="${response.reply_id}"
+                                              data-vote-type="upvote">
+                                          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7"/>
+                                          </svg>
+                                          <span class="likes-count ml-1">0</span>
+                                      </button>
+                                      <button class="vote-button downvote"
+                                              data-reply-id="${response.reply_id}"
+                                              data-vote-type="downvote">
+                                          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                                          </svg>
+                                          <span class="dislikes-count ml-1">0</span>
+                                      </button>
+                                  </div>
                               </div>
                           </div>
                       `;
@@ -734,11 +775,13 @@
                       replyContainer.prepend(newReply);
 
                       // Clear the textarea
-                      $(`#content-${postId}`).find("textarea").val("");
+                      form.find("textarea").val("");
 
                       // Update comments count
-                      const commentsCountElement = $(`.post-card[data-tag="${postId}"]`).find("span:contains('comments')");
-                      const currentCount = parseInt(commentsCountElement.text());
+                      const postCard = form.closest(".post-card");
+                      const commentsCountElement = postCard.find("span:contains('comments')");
+                      const currentText = commentsCountElement.text();
+                      const currentCount = parseInt(currentText);
                       commentsCountElement.text(`${currentCount + 1} comments`);
                   },
                   error: function(xhr, status, error) {
@@ -746,24 +789,6 @@
                       alert('An error occurred while submitting your reply. Please try again.');
                   }
               });
-          });
-
-          // Like post buttons
-          $(".like-button").click(function() {
-              const postId = $(this).data("post-id");
-              const likeCountElement = $(this).next(".like-count");
-              const currentLikes = parseInt(likeCountElement.text());
-
-              // Toggle like/unlike (in a real app, this would call an API)
-              $(this).toggleClass("text-green-500 text-gray-400");
-
-              // For demo purposes, just increment the count
-              // In a real app, you'd send an AJAX request to your backend
-              if ($(this).hasClass("text-green-500")) {
-                  likeCountElement.text(currentLikes + 1);
-              } else {
-                  likeCountElement.text(Math.max(0, currentLikes - 1));
-              }
           });
 
           // Initialize search
@@ -886,8 +911,6 @@
               }
           });
 
-          // Rest of your existing script code...
-          // ...existing code...
           // Updated scroll handling for toggle button
           let lastScrollTop = 0;
           const header = $('header');
@@ -899,12 +922,6 @@
               // This function is now just a placeholder in case we need to add functionality later
           }
           
-          // Remove initial position call
-          // updateTogglePosition();
-          
-          // Remove scroll event handler that was updating the position
-          // $(window).scroll(updateTogglePosition);
-          
           // Only keep resize handler to handle potential orientation changes
           $(window).resize(function() {
               if (window.innerWidth >= 768) {
@@ -912,8 +929,8 @@
               }
           });
 
-          // Handle voting for posts
-          $('.vote-button').click(function() {
+          // Use event delegation for vote buttons to handle dynamically added content
+          $(document).on('click', '.vote-button', function() {
               if (!$(this).prop('disabled')) {
                   const postId = $(this).data('post-id');
                   const replyId = $(this).data('reply-id');
@@ -983,8 +1000,6 @@
           });
           
           $('#search-input').on('input', function() {
-              // ...existing search code...
-              
               // Ensure body scroll state is maintained
               $('body').addClass('search-active');
               

@@ -5,6 +5,7 @@ from django.contrib.auth.password_validation import validate_password
 from .models import CustomUser, ForumTag, ForumPost, Moderator
 from django_recaptcha.fields import ReCaptchaField
 from django_recaptcha.widgets import ReCaptchaV2Checkbox
+import re
 
 
 class UserCreationForm(forms.ModelForm):
@@ -25,6 +26,14 @@ class UserCreationForm(forms.ModelForm):
 
         if password1 and password2 and password1 != password2:
             self.add_error("password2", "Passwords don't match")
+
+        # Password validation - at least 8 characters with letters and numbers
+        if password1:
+            if len(password1) < 8:
+                self.add_error("password1", "Password must be at least 8 characters long")
+            
+            if not re.search(r'[A-Za-z]', password1) or not re.search(r'[0-9]', password1):
+                self.add_error("password1", "Password must contain both letters and numbers")
 
         return cleaned_data
 
@@ -77,6 +86,14 @@ class ModeratorCreationForm(forms.ModelForm):
 
         if password and password_confirm and password != password_confirm:
             self.add_error("password_confirm", "Passwords don't match")
+            
+        # Password validation - at least 8 characters with letters and numbers
+        if password:
+            if len(password) < 8:
+                self.add_error("password", "Password must be at least 8 characters long")
+            
+            if not re.search(r'[A-Za-z]', password) or not re.search(r'[0-9]', password):
+                self.add_error("password", "Password must contain both letters and numbers")
 
         bio = cleaned_data.get("bio")
         if bio and len(bio) < 100:
@@ -94,6 +111,10 @@ class ModeratorCreationForm(forms.ModelForm):
             email=self.cleaned_data["email"],
             password=self.cleaned_data["password"]
         )
+        
+        # Set the user role to 'moderator' even though the status will be pending
+        custom_user.role = 'moderator'
+        custom_user.save()
         
         # Now set the username field with the CustomUser instance
         moderator.username = custom_user

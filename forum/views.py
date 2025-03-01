@@ -292,42 +292,37 @@ def like_comment(request, comment_id):
 def delete_discussion(request, discussion_id):
     discussion = get_object_or_404(ForumPost, id=discussion_id)
 
-    # Check if the user is the owner of the discussion
-    if discussion.author != request.user:
+    # Check if the user is the owner of the discussion, a moderator, or is staff
+    if discussion.author == request.user or request.user.role == 'moderator' or request.user.is_staff:
+        discussion.delete()
+        messages.success(request, "Discussion deleted successfully.")
+    else:
         messages.error(request, "You don't have permission to delete this discussion.")
-        return redirect("forum_list")
-
-    # Delete the discussion
-    discussion.delete()
-
-    messages.success(request, "Discussion deleted successfully.")
+    
+    # Always redirect back to forum list
     return redirect("forum_list")
 
 
 @login_required
 def delete_comment(request, comment_id):
     # Try to get the comment from ForumReply
-    try:
-        comment = get_object_or_404(ForumReply, id=comment_id)
-        redirect_url = "forum_list"
-    except ForumReply.DoesNotExist:
-        # If not found, try to get from Comment model
-        comment = get_object_or_404(Comment, id=comment_id)
-        redirect_url = "view_discussion"
-        discussion_id = comment.discussion.id
-
-    # Check if the user is the owner of the comment
-    if comment.author != request.user:
+    comment = get_object_or_404(ForumReply, id=comment_id)
+    parent_post = comment.post
+    
+    # Check if the user is the owner of the comment, a moderator, or is staff
+    if comment.author == request.user or request.user.role == 'moderator' or request.user.is_staff:
+        comment.delete()
+        messages.success(request, "Comment deleted successfully.")
+    else:
         messages.error(request, "You don't have permission to delete this comment.")
-        return redirect(redirect_url, discussion_id=discussion_id if 'discussion_id' in locals() else None)
 
-    # Delete the comment
-    comment.delete()
-
-    messages.success(request, "Comment deleted successfully.")
-    if redirect_url == "view_discussion":
-        return redirect(redirect_url, discussion_id=discussion_id)
-    return redirect(redirect_url)
+    # If we came from the discussion detail page, go back there
+    referer = request.META.get('HTTP_REFERER', '')
+    if f'/discussion/{parent_post.id}' in referer:
+        return redirect('view_discussion', discussion_id=parent_post.id)
+    
+    # Otherwise go back to forum list
+    return redirect("forum_list")
 
 
 @login_required
