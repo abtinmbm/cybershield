@@ -5,7 +5,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = "6Le1y-IqAAAAAP9K6_Gr8v7Yp_XShGY0a--JWgrv"
 DEBUG = True
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["35.182.152.63"]
 
 INSTALLED_APPS = [
     # Custom admin interface (must come before django.contrib.admin)
