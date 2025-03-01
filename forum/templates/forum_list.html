@@ -56,7 +56,220 @@
         border-radius: 0.25rem;
         margin-left: 0.4rem;
       }
-
+      
+      /* New styles for voting */
+      .vote-button {
+        @apply flex items-center px-2 py-1 rounded transition-colors duration-200;
+      }
+      .vote-button.upvote {
+        @apply hover:text-green-500;
+      }
+      .vote-button.downvote {
+        @apply hover:text-red-500;
+      }
+      .vote-button.active.upvote {
+        @apply text-green-500;
+      }
+      .vote-button.active.downvote {
+        @apply text-red-500;
+      }
+      .vote-button[disabled] {
+        @apply opacity-50 cursor-not-allowed;
+      }
+      
+      /* Improved responsive design */
+      @media (max-width: 640px) {
+        .post-card {
+          @apply mx-2;
+        }
+        .header-content {
+          @apply flex-col items-start space-y-2;
+        }
+        .vote-buttons {
+          @apply flex-col space-y-1;
+        }
+      }
+      /* Add these new styles for sticky sidebar and mobile collapse */
+      .sidebar {
+        @apply transition-all duration-300 ease-in-out;
+      }
+      
+      @media (min-width: 768px) {
+        .sidebar {
+          position: sticky;
+          top: 6rem; /* Adjust based on header height + desired spacing */
+          max-height: calc(100vh - 6rem);
+          overflow-y: auto;
+        }
+      }
+      
+      @media (max-width: 767px) {
+        .sidebar {
+          position: fixed;
+          top: 0;
+          left: 0;
+          right: 0;
+          z-index: 40;
+          background-color: var(--dark-blue);
+          padding: 1rem;
+          transform: translateY(-100%);
+          box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+        
+        .sidebar.expanded {
+          transform: translateY(4rem); /* Adjust based on header height */
+        }
+        
+        .toggle-sidebar {
+          @apply fixed z-50 right-4 bg-slate-800 text-white p-2 rounded-full shadow-lg;
+          top: 5rem; /* Position below header */
+        }
+        
+        .toggle-sidebar svg {
+          @apply w-6 h-6;
+          transition: transform 0.3s ease;
+        }
+        
+        .toggle-sidebar.active svg {
+          transform: rotate(180deg);
+        }
+      }
+      
+      /* Make sure scrollbar looks good */
+      .sidebar::-webkit-scrollbar {
+        width: 6px;
+      }
+      
+      .sidebar::-webkit-scrollbar-track {
+        background: var(--midnight);
+      }
+      
+      .sidebar::-webkit-scrollbar-thumb {
+        background: var(--highlight);
+        border-radius: 3px;
+      }
+      
+      /* Updated sidebar styles for better desktop and mobile experience */
+      .sidebar {
+        @apply transition-all duration-300 ease-in-out;
+      }
+      
+      /* Desktop styles - make sidebar narrower and ensure it fits */
+      @media (min-width: 768px) {
+        .sidebar {
+          position: sticky;
+          top: 6rem;
+          max-height: calc(100vh - 8rem);
+          overflow-y: auto;
+          width: 280px; /* Reduced width */
+        }
+        
+        .main-content {
+          max-width: calc(100% - 300px); /* Ensure main content has enough space */
+        }
+      }
+      
+      /* Mobile styles - make sidebar float and follow scroll */
+      @media (max-width: 767px) {
+        .sidebar {
+          position: fixed;
+          top: auto;
+          bottom: 0;
+          left: 0;
+          right: 0;
+          z-index: 40;
+          background-color: var(--dark-blue);
+          padding: 1rem;
+          transform: translateY(100%);
+          box-shadow: 0 -4px 6px -1px rgba(0, 0, 0, 0.1);
+          max-height: 80vh;
+          overflow-y: auto;
+        }
+        
+        .sidebar.expanded {
+          transform: translateY(0);
+        }
+        
+        /* Overlay when sidebar is open */
+        .sidebar-overlay {
+          display: none;
+          position: fixed;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          background-color: rgba(0, 0, 0, 0.5);
+          z-index: 39;
+        }
+        
+        .sidebar-overlay.active {
+          display: block;
+        }
+        
+        .toggle-sidebar {
+          @apply fixed z-50 right-4 bottom-4 bg-blue-600 text-white p-3 rounded-full shadow-lg;
+        }
+        
+        .toggle-sidebar svg {
+          @apply w-6 h-6;
+          transition: transform 0.3s ease;
+        }
+        
+        .toggle-sidebar.active svg {
+          transform: rotate(180deg);
+        }
+        
+        /* Add padding to bottom of main content to account for floating button */
+        .main-content {
+          padding-bottom: 5rem;
+        }
+      }
+      /* Update mobile toggle button styles */
+      @media (max-width: 767px) {
+        .toggle-sidebar {
+          position: fixed;
+          z-index: 50;
+          right: 1rem;
+          background-color: #1d4ed8;
+          padding: 0.75rem;
+          border-radius: 0.5rem;
+          box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+          transition: top 0.3s ease;
+          top: 5rem; /* Initial position */
+        }
+        
+        .hamburger-menu {
+          width: 24px;
+          height: 18px;
+          display: flex;
+          flex-direction: column;
+          justify-content: space-between;
+        }
+        
+        .hamburger-menu span {
+          display: block;
+          height: 2px;
+          width: 100%;
+          background-color: white;
+          transition: all 0.3s ease;
+          transform-origin: left center;
+        }
+        
+        .toggle-sidebar.active .hamburger-menu span:nth-child(1) {
+          transform: rotate(45deg);
+          width: 110%;
+        }
+        
+        .toggle-sidebar.active .hamburger-menu span:nth-child(2) {
+          opacity: 0;
+          width: 0;
+        }
+        
+        .toggle-sidebar.active .hamburger-menu span:nth-child(3) {
+          transform: rotate(-45deg);
+          width: 110%;
+        }
+      }
     </style>
   </head>
   <body class="min-h-screen flex flex-col">
@@ -104,10 +317,24 @@
       </div>
     </header>
 
-    <main class="container mx-auto flex-grow py-6 px-4 md:px-0">
+    <main class="container mx-auto flex-grow py-6 px-4 md:px-6">
+      <!-- Mobile toggle button -->
+      <div class="md:hidden">
+        <button class="toggle-sidebar">
+          <div class="hamburger-menu">
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
+        </button>
+      </div>
+
+      <!-- Mobile overlay -->
+      <div class="sidebar-overlay md:hidden"></div>
+
       <div class="flex flex-col md:flex-row gap-6">
         <!-- Sidebar with filters -->
-        <aside class="w-full md:w-64 lg:w-80">
+        <aside class="sidebar w-full md:w-64 lg:w-80">
           <div class="bg-slate-800 rounded-lg shadow-lg p-4 mb-4">
             <h2 class="text-xl font-semibold mb-4">Search</h2>
             <div class="relative">
@@ -146,7 +373,7 @@
         </aside>
 
         <!-- Main content -->
-        <div class="flex-grow">
+        <div class="main-content flex-grow">
           <h1 class="text-2xl font-bold mb-6">Recent Discussions</h1>
 
           <div id="forum-posts">
@@ -158,10 +385,8 @@
               <!-- Post header - always visible -->
               <div class="p-4">
                 <div class="flex justify-between items-start">
-                  <h2 class="text-xl font-semibold">{{ post.title }}</h2>
-                  <span class="bg-slate-700 text-xs px-2 py-1 rounded"
-                    >{{ post.forum_tag.name }}</span
-                  >
+                  <h2 class="text-xl font-semibold flex-grow">{{ post.title }}</h2>
+                  <span class="bg-slate-700 text-xs px-2 py-1 rounded ml-2">{{ post.forum_tag.name }}</span>
                 </div>
                 <div
                   class="flex justify-between items-center mt-4 text-sm text-slate-400"
@@ -182,30 +407,33 @@
                     <span class="mx-2">•</span>
                     <span>{{ post.created_at|date:"M d, Y" }}</span>
                   </div>
-                  <div class="flex items-center space-x-4">
-                    <span>{{ post.forumreply_set.count }} comments</span>
-                    <div class="flex items-center">
-                      <button
-                        class="like-button mr-1 text-gray-400 hover:text-green-500"
-                        data-post-id="{{ post.id }}"
-                      >
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          class="h-5 w-5"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          stroke="currentColor"
-                        >
-                          <path
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            stroke-width="2"
-                            d="M5 15l7-7 7 7"
-                          />
+                  <div class="flex items-center space-x-2">
+                    <div class="flex items-center space-x-1">
+                      {% if user.is_authenticated %}
+                      <button class="vote-button upvote {% if user in post.likes.all %}active{% endif %}" 
+                              data-post-id="{{ post.id }}" 
+                              data-vote-type="upvote">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7"/>
                         </svg>
+                        <span class="likes-count ml-1">{{ post.likes.count }}</span>
                       </button>
-                      <span class="like-count">{{ post.likes.count }}</span>
+                      <button class="vote-button downvote {% if user in post.dislikes.all %}active{% endif %}"
+                              data-post-id="{{ post.id }}"
+                              data-vote-type="downvote">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                        </svg>
+                        <span class="dislikes-count ml-1">{{ post.dislikes.count }}</span>
+                      </button>
+                      {% else %}
+                      <div class="text-sm text-slate-500">
+                        <a href="{% url 'login' %}" class="text-blue-400 hover:text-blue-300">Log in</a> to vote
+                      </div>
+                      {% endif %}
                     </div>
+                    <span class="mx-2">•</span>
+                    <span>{{ post.forumreply_set.count }} comments</span>
                   </div>
                 </div>
                 <button
@@ -251,7 +479,7 @@
                 class="post-content border-t border-slate-700"
               >
                 <div class="p-4">
-                  <div class="text-slate-300">
+                  <div class="prose prose-invert max-w-none">
                     {{ post.content|linebreaks }}
                   </div>
 
@@ -282,28 +510,26 @@
                         <div
                           class="flex items-center mt-2 text-xs text-slate-400"
                         >
-                          <button
-                            class="flex items-center mr-3 hover:text-green-500 reply-like-button"
-                            data-reply-id="{{ reply.id }}"
-                          >
-                            <svg
-                              xmlns="http://www.w3.org/2000/svg"
-                              class="h-4 w-4 mr-1"
-                              fill="none"
-                              viewBox="0 0 24 24"
-                              stroke="currentColor"
-                            >
-                              <path
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                                stroke-width="2"
-                                d="M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V5a2 2 0 00-2-2h-.095c-.5 0-.905.405-.905.905 0 .714-.211 1.412-.608 2.006L7 11v9m7-10h-2M7 20H5a2 2 0 01-2-2v-6a2 2 0 012-2h2.5"
-                              />
-                            </svg>
-                            <span class="reply-like-count"
-                              >{{ reply.likes.count }}</span
-                            >
-                          </button>
+                          {% if user.is_authenticated %}
+                          <div class="flex items-center space-x-2">
+                            <button class="vote-button upvote {% if user in reply.likes.all %}active{% endif %}"
+                                    data-reply-id="{{ reply.id }}"
+                                    data-vote-type="upvote">
+                              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7"/>
+                              </svg>
+                              <span class="likes-count ml-1">{{ reply.likes.count }}</span>
+                            </button>
+                            <button class="vote-button downvote {% if user in reply.dislikes.all %}active{% endif %}"
+                                    data-reply-id="{{ reply.id }}"
+                                    data-vote-type="downvote">
+                              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                              </svg>
+                              <span class="dislikes-count ml-1">{{ reply.dislikes.count }}</span>
+                            </button>
+                          </div>
+                          {% endif %}
                         </div>
                       </div>
                       {% empty %}
@@ -317,6 +543,7 @@
                     <form class="mt-4 reply-form" data-post-id="{{ post.id }}">
                       {% csrf_token %}
                       <textarea
+                        name="content"
                         class="w-full bg-slate-700 text-white border border-slate-600 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
                         rows="3"
                         placeholder="Add a comment..."
@@ -433,11 +660,12 @@
           // Handle reply form submission
           $(".reply-form").submit(function(e) {
               e.preventDefault();
-              const postId = $(this).data("post-id");
-              const content = $(this).find("textarea").val();
-              const replyContainer = $(this).closest(".post-content").find(".replies-container");
+              const form = $(this);
+              const postId = form.data("post-id");
+              const content = form.find("textarea[name='content']").val().trim();
+              const replyContainer = form.closest(".post-content").find(".replies-container");
 
-              if (!content.trim()) return;
+              if (!content) return;
 
               // Send AJAX request to save the reply
               $.ajax({
@@ -446,7 +674,7 @@
                   data: {
                       'post_id': postId,
                       'content': content,
-                      'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val()
+                      'csrfmiddlewaretoken': form.find('input[name=csrfmiddlewaretoken]').val()
                   },
                   success: function(response) {
                       // Add the new reply to the DOM
@@ -561,6 +789,162 @@
           $(document).on('click', function(e) {
               if (!$(e.target).closest('#search-input, #search-results').length) {
                   $('#search-results').hide();
+              }
+          });
+
+          // Add these new functions for mobile sidebar toggle
+          $('.toggle-sidebar').click(function() {
+              $(this).toggleClass('active');
+              $('.sidebar').toggleClass('expanded');
+              $('.sidebar-overlay').toggleClass('active');
+              
+              // Change icon based on state
+              const svg = $(this).find('svg');
+              if ($(this).hasClass('active')) {
+                  svg.html('<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />');
+              } else {
+                  svg.html('<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />');
+              }
+          });
+
+          // Close sidebar when clicking overlay
+          $('.sidebar-overlay').click(function() {
+              $('.sidebar').removeClass('expanded');
+              $('.toggle-sidebar').removeClass('active');
+              $(this).removeClass('active');
+              $('.toggle-sidebar svg').html('<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />');
+          });
+
+          // Close sidebar when clicking a filter
+          $('.filter-tag').on('click', function() {
+              if (window.innerWidth < 768) {
+                  $('.sidebar').removeClass('expanded');
+                  $('.toggle-sidebar').removeClass('active');
+                  $('.sidebar-overlay').removeClass('active');
+                  $('.toggle-sidebar svg').html('<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />');
+              }
+          });
+
+          // Close sidebar when selecting a search result
+          $('#search-results').on('click', 'div', function() {
+              if (window.innerWidth < 768) {
+                  $('.sidebar').removeClass('expanded');
+                  $('.toggle-sidebar').removeClass('active');
+                  $('.sidebar-overlay').removeClass('active');
+                  $('.toggle-sidebar svg').html('<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />');
+              }
+          });
+
+          // Add scroll lock when sidebar is open on mobile
+          function toggleScrollLock(lock) {
+              if (lock) {
+                  $('body').css('overflow', 'hidden');
+              } else {
+                  $('body').css('overflow', '');
+              }
+          }
+
+          $('.toggle-sidebar').click(function() {
+              if (window.innerWidth < 768) {
+                  toggleScrollLock($(this).hasClass('active'));
+              }
+          });
+
+          $('.sidebar-overlay').click(function() {
+              toggleScrollLock(false);
+          });
+
+          // Handle window resize
+          $(window).resize(function() {
+              if (window.innerWidth >= 768) {
+                  $('.sidebar-overlay').removeClass('active');
+                  toggleScrollLock(false);
+              }
+          });
+
+          // Rest of your existing script code...
+          // ...existing code...
+          // Updated scroll handling for toggle button
+          let lastScrollTop = 0;
+          const header = $('header');
+          const headerHeight = header.outerHeight();
+          const toggleBtn = $('.toggle-sidebar');
+          
+          function updateTogglePosition() {
+              if (window.innerWidth < 768) {
+                  const scrollTop = $(window).scrollTop();
+                  const newTop = Math.max(scrollTop + 16, headerHeight + 16);
+                  toggleBtn.css('top', newTop + 'px');
+              }
+          }
+          
+          // Initial position
+          updateTogglePosition();
+          
+          // Update on scroll
+          $(window).scroll(updateTogglePosition);
+          
+          // Update on resize
+          $(window).resize(function() {
+              if (window.innerWidth >= 768) {
+                  toggleBtn.css('top', '');
+              } else {
+                  updateTogglePosition();
+              }
+          });
+
+          // Handle voting for posts
+          $('.vote-button').click(function() {
+              if (!$(this).prop('disabled')) {
+                  const postId = $(this).data('post-id');
+                  const replyId = $(this).data('reply-id');
+                  const voteType = $(this).data('vote-type');
+                  const button = $(this);
+                  const container = button.closest('.post-card, .bg-slate-700');
+                  const otherButton = voteType === 'upvote' ? 
+                      button.next('.vote-button') : 
+                      button.prev('.vote-button');
+                  
+                  // Determine if this is a post or reply vote
+                  const endpoint = replyId ? '{% url "vote_reply" %}' : '{% url "vote_post" %}';
+                  const data = replyId ? 
+                      { reply_id: replyId, vote_type: voteType } : 
+                      { post_id: postId, vote_type: voteType };
+                      
+                  // Add CSRF token
+                  data.csrfmiddlewaretoken = $('input[name=csrfmiddlewaretoken]').val();
+                  
+                  // Disable buttons during request
+                  container.find('.vote-button').prop('disabled', true);
+                  
+                  $.ajax({
+                      url: endpoint,
+                      type: 'POST',
+                      data: data,
+                      success: function(response) {
+                          if (response.status === 'success') {
+                              // Update vote counts
+                              container.find('.likes-count').text(response.likes_count);
+                              container.find('.dislikes-count').text(response.dislikes_count);
+                              
+                              // Remove active class from both buttons
+                              button.removeClass('active');
+                              otherButton.removeClass('active');
+                              
+                              // Add active class if vote was added
+                              if (response.action === 'added') {
+                                  button.addClass('active');
+                              }
+                          }
+                      },
+                      error: function(xhr, status, error) {
+                          console.error('Vote error:', error);
+                      },
+                      complete: function() {
+                          // Re-enable buttons
+                          container.find('.vote-button').prop('disabled', false);
+                      }
+                  });
               }
           });
       });

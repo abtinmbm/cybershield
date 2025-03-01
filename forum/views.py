@@ -18,7 +18,9 @@ from django.db import IntegrityError, transaction
 from django.http import HttpResponseRedirect, JsonResponse
 from django.contrib import messages
 from .functions import get_public_resource_moderator, get_public_resource_user
+import logging
 
+logger = logging.getLogger(__name__)
 
 # View to return the forum list in JSON format to be used for fitlering and searching
 def forum_list(request):
@@ -178,6 +180,70 @@ def terms_conditions(request):
 # View to handle forum creation form submission
 
 
+# ...existing imports and code...
+
+@login_required
+def add_reply(request):
+    if request.method == "POST":
+        post_id = request.POST.get("post_id")
+        content = request.POST.get("content")
+        
+        # Debug logging
+        logger.debug(f"Received add_reply request - post_id: {post_id}, content: {content}")
+
+        if not post_id:
+            return JsonResponse({
+                "status": "error",
+                "message": "Missing post_id"
+            }, status=400)
+            
+        if not content or not content.strip():
+            return JsonResponse({
+                "status": "error",
+                "message": "Content cannot be empty"
+            }, status=400)
+
+        try:
+            # Get the post
+            post = ForumPost.objects.get(id=post_id)
+            
+            # Create the reply
+            reply = ForumReply.objects.create(
+                post=post,
+                author=request.user,
+                content=content.strip()
+            )
+
+            # Return success response
+            return JsonResponse({
+                "status": "success",
+                "author": request.user.username,
+                "reply_id": reply.id,
+                "content": content,
+                "created_at": reply.created_at.strftime("%Y-%m-%d %H:%M:%S")
+            })
+
+        except ForumPost.DoesNotExist:
+            logger.error(f"Post not found with ID: {post_id}")
+            return JsonResponse({
+                "status": "error",
+                "message": "Post not found"
+            }, status=404)
+        except Exception as e:
+            logger.error(f"Error creating reply: {str(e)}")
+            return JsonResponse({
+                "status": "error",
+                "message": str(e)
+            }, status=400)
+
+    return JsonResponse({
+        "status": "error",
+        "message": "Invalid request method"
+    }, status=400)
+
+# ...rest of existing code...
+
+
 # Add this view function for JSON API
 def forum_list_json(request):
     # Fetch all forum posts
@@ -204,28 +270,6 @@ def forum_list_json(request):
 
 
 @login_required
-def add_reply(request):
-    if request.method == "POST":
-        post_id = request.POST.get("post_id")
-        content = request.POST.get("content")
-
-        if post_id and content:
-            try:
-                post = ForumPost.objects.get(id=post_id)
-                reply = ForumReply.objects.create(
-                    content=content, author=request.user, post=post
-                )
-
-                return JsonResponse(
-                    {"status": "success", "author": request.user.username}
-                )
-            except Exception as e:
-                return JsonResponse({"status": "error", "message": str(e)}, status=400)
-
-    return JsonResponse({"status": "error", "message": "Invalid request"}, status=400)
-
-
-@login_required
 def like_comment(request, comment_id):
     # Get the comment using ForumReply instead of Comment
     comment = get_object_or_404(ForumReply, id=comment_id)
@@ -246,7 +290,6 @@ def like_comment(request, comment_id):
 
 @login_required
 def delete_discussion(request, discussion_id):
-    # Get the discussion using ForumPost
     discussion = get_object_or_404(ForumPost, id=discussion_id)
 
     # Check if the user is the owner of the discussion
@@ -263,54 +306,28 @@ def delete_discussion(request, discussion_id):
 
 @login_required
 def delete_comment(request, comment_id):
-    # Get the comment using ForumReply
-    comment = get_object_or_404(ForumReply, id=comment_id)
+    # Try to get the comment from ForumReply
+    try:
+        comment = get_object_or_404(ForumReply, id=comment_id)
+        redirect_url = "forum_list"
+    except ForumReply.DoesNotExist:
+        # If not found, try to get from Comment model
+        comment = get_object_or_404(Comment, id=comment_id)
+        redirect_url = "view_discussion"
+        discussion_id = comment.discussion.id
 
     # Check if the user is the owner of the comment
     if comment.author != request.user:
         messages.error(request, "You don't have permission to delete this comment.")
-        return redirect("forum_list")
+        return redirect(redirect_url, discussion_id=discussion_id if 'discussion_id' in locals() else None)
 
     # Delete the comment
     comment.delete()
 
     messages.success(request, "Comment deleted successfully.")
-    return redirect("forum_list")
-
-
-@login_required
-def delete_discussion(request, discussion_id):
-    discussion = get_object_or_404(ForumPost, id=discussion_id)
-
-    # Check if the user is the owner of the discussion
-    if discussion.author != request.user:
-        messages.error(request, "You don't have permission to delete this discussion.")
-        return redirect("forum_list")
-
-    # Delete the discussion
-    discussion.delete()
-
-    messages.success(request, "Discussion deleted successfully.")
-    return redirect("forum_list")
-
-
-@login_required
-def delete_comment(request, comment_id):
-    comment = get_object_or_404(Comment, id=comment_id)
-
-    # Check if the user is the owner of the comment
-    if comment.author != request.user:
-        messages.error(request, "You don't have permission to delete this comment.")
-        return redirect("view_discussion", discussion_id=comment.discussion.id)
-
-    # Store the discussion ID before deleting the comment
-    discussion_id = comment.discussion.id
-
-    # Delete the comment
-    comment.delete()
-
-    messages.success(request, "Comment deleted successfully.")
-    return redirect("view_discussion", discussion_id=discussion_id)
+    if redirect_url == "view_discussion":
+        return redirect(redirect_url, discussion_id=discussion_id)
+    return redirect(redirect_url)
 
 
 @login_required
@@ -389,3 +406,88 @@ def user_profile(request, username):
     }
     
     return render(request, 'user_profile.html', context)
+
+
+@login_required
+def vote_post(request):
+    if request.method == 'POST':
+        post_id = request.POST.get('post_id')
+        vote_type = request.POST.get('vote_type')
+        
+        try:
+            post = ForumPost.objects.get(id=post_id)
+            
+            # Handle upvote
+            if vote_type == 'upvote':
+                if request.user in post.likes.all():
+                    post.likes.remove(request.user)
+                    action = 'removed'
+                else:
+                    post.likes.add(request.user)
+                    post.dislikes.remove(request.user)  # Remove dislike if exists
+                    action = 'added'
+            
+            # Handle downvote
+            elif vote_type == 'downvote':
+                if request.user in post.dislikes.all():
+                    post.dislikes.remove(request.user)
+                    action = 'removed'
+                else:
+                    post.dislikes.add(request.user)
+                    post.likes.remove(request.user)  # Remove like if exists
+                    action = 'added'
+            
+            return JsonResponse({
+                'status': 'success',
+                'likes_count': post.likes.count(),
+                'dislikes_count': post.dislikes.count(),
+                'action': action,
+                'vote_type': vote_type
+            })
+            
+        except ForumPost.DoesNotExist:
+            return JsonResponse({'status': 'error', 'message': 'Post not found'}, status=404)
+            
+    return JsonResponse({'status': 'error', 'message': 'Invalid request'}, status=400)
+
+@login_required
+def vote_reply(request):
+    if request.method == 'POST':
+        reply_id = request.POST.get('reply_id')
+        vote_type = request.POST.get('vote_type')
+        
+        try:
+            reply = ForumReply.objects.get(id=reply_id)
+            
+            # Handle upvote
+            if vote_type == 'upvote':
+                if request.user in reply.likes.all():
+                    reply.likes.remove(request.user)
+                    action = 'removed'
+                else:
+                    reply.likes.add(request.user)
+                    reply.dislikes.remove(request.user)  # Remove dislike if exists
+                    action = 'added'
+            
+            # Handle downvote
+            elif vote_type == 'downvote':
+                if request.user in reply.dislikes.all():
+                    reply.dislikes.remove(request.user)
+                    action = 'removed'
+                else:
+                    reply.dislikes.add(request.user)
+                    reply.likes.remove(request.user)  # Remove like if exists
+                    action = 'added'
+            
+            return JsonResponse({
+                'status': 'success',
+                'likes_count': reply.likes.count(),
+                'dislikes_count': reply.dislikes.count(),
+                'action': action,
+                'vote_type': vote_type
+            })
+            
+        except ForumReply.DoesNotExist:
+            return JsonResponse({'status': 'error', 'message': 'Reply not found'}, status=404)
+            
+    return JsonResponse({'status': 'error', 'message': 'Invalid request'}, status=400)

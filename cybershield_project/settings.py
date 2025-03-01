@@ -129,3 +129,20 @@ CKEDITOR_5_CONFIGS = {
         ],
     },
 }
+
+# Logging configuration
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+        },
+    },
+    'loggers': {
+        'forum': {
+            'handlers': ['console'],
+            'level': 'DEBUG',
+        },
+    },
+}

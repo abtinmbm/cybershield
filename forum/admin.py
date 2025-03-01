@@ -14,17 +14,7 @@ site.disable_action("delete_selected")
 # Create initial forum tags if they don't exist
 def create_initial_forum_tags():
     tags = [
-        "Phishing",
-        "Ransomware",
-        "DDoS",
-        "Malware",
-        "Security News",
-        "Data Breaches",
-        "Social Engineering",
-        "Network Security",
-        "Zero-day Exploits",
-        "Cryptography",
-        "Identity Theft",
+        
     ]
 
     for tag in tags:

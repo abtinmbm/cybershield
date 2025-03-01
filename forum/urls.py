@@ -17,6 +17,8 @@ from .views import (
     add_comment,
     view_discussion,
     user_profile,
+    vote_post,
+    vote_reply,
 )
 
 urlpatterns = [
@@ -39,4 +41,6 @@ urlpatterns = [
     path("discussion/<int:discussion_id>/comment/", add_comment, name="add_comment"),
     path("discussion/<int:discussion_id>/", view_discussion, name="view_discussion"),
     path("user/<str:username>/", user_profile, name="user_profile"),
+    path('vote/post/', vote_post, name='vote_post'),
+    path('vote/reply/', vote_reply, name='vote_reply'),
 ]
