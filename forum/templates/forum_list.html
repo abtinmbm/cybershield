@@ -1118,6 +1118,18 @@
             }
 
             $('#forum-posts').html(sortedPosts);
+
+            // Reattach event listeners for dynamically added content
+            $('.toggle-post').off('click').on('click', function() {
+              const postId = $(this).data('post-id');
+              const contentDiv = $(`#content-${postId}`);
+
+              // Toggle expanded class
+              contentDiv.toggleClass('expanded');
+
+              // Toggle icons and text
+              $(this).find('.show-text, .hide-text, .show-icon, .hide-icon').toggleClass('hidden');
+            });
           });
       });
     </script>
