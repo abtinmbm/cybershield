@@ -59,39 +59,56 @@
       
       /* New styles for voting */
       .vote-button {
-        @apply flex items-center px-2 py-1 rounded transition-colors duration-200;
+        display: flex;
+        align-items: center;
+        padding-left: 0.5rem;
+        padding-right: 0.5rem;
+        padding-top: 0.25rem;
+        padding-bottom: 0.25rem;
+        border-radius: 0.25rem;
+        transition-property: color;
+        transition-duration: 200ms;
       }
-      .vote-button.upvote {
-        @apply hover:text-green-500;
+      .vote-button.upvote:hover {
+        color: #22c55e;
       }
-      .vote-button.downvote {
-        @apply hover:text-red-500;
+      .vote-button.downvote:hover {
+        color: #ef4444;
       }
       .vote-button.active.upvote {
-        @apply text-green-500;
+        color: #22c55e;
       }
       .vote-button.active.downvote {
-        @apply text-red-500;
+        color: #ef4444;
       }
       .vote-button[disabled] {
-        @apply opacity-50 cursor-not-allowed;
+        opacity: 0.5;
+        cursor: not-allowed;
       }
       
       /* Improved responsive design */
       @media (max-width: 640px) {
         .post-card {
-          @apply mx-2;
+          margin-left: 0.5rem;
+          margin-right: 0.5rem;
         }
         .header-content {
-          @apply flex-col items-start space-y-2;
+          display: flex;
+          flex-direction: column;
+          align-items: flex-start;
+          gap: 0.5rem;
         }
         .vote-buttons {
-          @apply flex-col space-y-1;
+          display: flex;
+          flex-direction: column;
+          gap: 0.25rem;
         }
       }
       /* Add these new styles for sticky sidebar and mobile collapse */
       .sidebar {
-        @apply transition-all duration-300 ease-in-out;
+        transition-property: all;
+        transition-duration: 300ms;
+        transition-timing-function: ease-in-out;
       }
       
       @media (min-width: 768px) {
@@ -121,13 +138,23 @@
         }
         
         .toggle-sidebar {
-          @apply fixed z-50 right-4 bg-slate-800 text-white p-2 rounded-full shadow-lg;
-          top: 5rem; /* Position below header */
+          position: fixed;
+          z-index: 50;
+          right: 1rem;
+          bottom: 1rem;
+          background-color: #1e293b;
+          color: white;
+          padding: 0.5rem;
+          border-radius: 0.25rem;
+          box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
         }
         
         .toggle-sidebar svg {
-          @apply w-6 h-6;
-          transition: transform 0.3s ease;
+          width: 1.5rem;
+          height: 1.5rem;
+          transition-property: transform;
+          transition-duration: 300ms;
+          transition-timing-function: ease;
         }
         
         .toggle-sidebar.active svg {
@@ -151,7 +178,9 @@
       
       /* Updated sidebar styles for better desktop and mobile experience */
       .sidebar {
-        @apply transition-all duration-300 ease-in-out;
+        transition-property: all;
+        transition-duration: 300ms;
+        transition-timing-function: ease-in-out;
       }
       
       /* Desktop styles - make sidebar narrower and ensure it fits */
@@ -207,45 +236,38 @@
         }
         
         .toggle-sidebar {
-          @apply fixed z-50 right-4 bottom-4 bg-blue-600 text-white p-3 rounded-full shadow-lg;
+          position: fixed;
+          z-index: 50;
+          right: 1rem;
+          bottom: 1rem;
+          background-color: #1d4ed8;
+          padding: 0.5rem;
+          border-radius: 0.25rem;
+          box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+          transition-property: transform;
+          transition-duration: 300ms;
+          width: 2rem;
+          height: 2rem;
+          display: flex;
+          align-items: center;
+          justify-content: center;
         }
         
         .toggle-sidebar svg {
-          @apply w-6 h-6;
-          transition: transform 0.3s ease;
+          width: 1.5rem;
+          height: 1.5rem;
+          transition-property: transform;
+          transition-duration: 300ms;
+          transition-timing-function: ease;
         }
         
         .toggle-sidebar.active svg {
           transform: rotate(180deg);
         }
         
-        /* Add padding to bottom of main content to account for floating button */
-        .main-content {
-          padding-bottom: 5rem;
-        }
-      }
-      /* Update mobile toggle button styles */
-      @media (max-width: 767px) {
-        .toggle-sidebar {
-          position: fixed;
-          z-index: 50;
-          right: 1rem;
-          bottom: 1rem; /* Change from top positioning to bottom positioning */
-          background-color: #1d4ed8;
-          padding: 0.5rem; /* Smaller padding for a more compact button */
-          border-radius: 0.25rem; /* Square corners instead of rounded */
-          box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-          transition: transform 0.3s ease; /* Change from top to transform for smoother animation */
-          width: 2rem; /* Fixed width */
-          height: 2rem; /* Fixed height to make it square */
-          display: flex;
-          align-items: center;
-          justify-content: center;
-        }
-        
         .hamburger-menu {
-          width: 16px; /* Smaller width */
-          height: 12px; /* Smaller height */
+          width: 1rem;
+          height: 0.75rem;
           display: flex;
           flex-direction: column;
           justify-content: space-between;
@@ -253,10 +275,12 @@
         
         .hamburger-menu span {
           display: block;
-          height: 2px;
+          height: 0.125rem;
           width: 100%;
           background-color: white;
-          transition: all 0.3s ease;
+          transition-property: all;
+          transition-duration: 300ms;
+          transition-timing-function: ease;
           transform-origin: left center;
         }
         
@@ -273,6 +297,11 @@
         .toggle-sidebar.active .hamburger-menu span:nth-child(3) {
           transform: rotate(-45deg);
           width: 110%;
+        }
+        
+        /* Add padding to bottom of main content to account for floating button */
+        .main-content {
+          padding-bottom: 5rem;
         }
       }
       
@@ -369,6 +398,16 @@
                 id="search-results"
                 class="absolute left-0 right-0 mt-1 bg-slate-700 rounded-md shadow-lg max-h-60 overflow-y-auto hidden z-10"
               ></div>
+            </div>
+          </div>
+
+          <div class="bg-slate-800 rounded-lg shadow-lg p-4 mb-4">
+            <h2 class="text-xl font-semibold mb-4">Sort by</h2>
+            <div class="space-y-2">
+              <button class="sort-button w-full py-2 px-3 bg-slate-700 hover:bg-slate-600 rounded-md text-left transition-colors" data-sort="recent">Recently Posted</button>
+              <button class="sort-button w-full py-2 px-3 bg-slate-700 hover:bg-slate-600 rounded-md text-left transition-colors" data-sort="upvotes">Most Upvotes</button>
+              <button class="sort-button w-full py-2 px-3 bg-slate-700 hover:bg-slate-600 rounded-md text-left transition-colors" data-sort="downvotes">Most Downvotes</button>
+              <button class="sort-button w-full py-2 px-3 bg-slate-700 hover:bg-slate-600 rounded-md text-left transition-colors" data-sort="oldest">Oldest</button>
             </div>
           </div>
 
@@ -1054,6 +1093,32 @@
                   }, 100);
               }
           };
+
+          // Sort posts
+          $('.sort-button').on('click', function() {
+            const sortType = $(this).data('sort');
+            let sortedPosts;
+
+            if (sortType === 'recent') {
+              sortedPosts = $('.post-card').sort((a, b) => {
+                return new Date($(b).find('span:contains("Posted by")').next().next().text()) - new Date($(a).find('span:contains("Posted by")').next().next().text());
+              });
+            } else if (sortType === 'upvotes') {
+              sortedPosts = $('.post-card').sort((a, b) => {
+                return parseInt($(b).find('.likes-count').text()) - parseInt($(a).find('.likes-count').text());
+              });
+            } else if (sortType === 'downvotes') {
+              sortedPosts = $('.post-card').sort((a, b) => {
+                return parseInt($(b).find('.dislikes-count').text()) - parseInt($(a).find('.dislikes-count').text());
+              });
+            } else if (sortType === 'oldest') {
+              sortedPosts = $('.post-card').sort((a, b) => {
+                return new Date($(a).find('span:contains("Posted by")').next().next().text()) - new Date($(b).find('span:contains("Posted by")').next().next().text());
+              });
+            }
+
+            $('#forum-posts').html(sortedPosts);
+          });
       });
     </script>
 
