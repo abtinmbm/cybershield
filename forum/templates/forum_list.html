@@ -1155,11 +1155,11 @@
               });
             } else if (sortType === 'upvotes') {
               sortedPosts = $('.post-card').sort((a, b) => {
-                return parseInt($(b).find('.likes-count').text()) - parseInt($(a).find('.likes-count').text());
+                return parseInt($(b).find('.likes-count').text().trim()) - parseInt($(a).find('.likes-count').text().trim());
               });
             } else if (sortType === 'downvotes') {
               sortedPosts = $('.post-card').sort((a, b) => {
-                return parseInt($(b).find('.dislikes-count').text()) - parseInt($(a).find('.dislikes-count').text());
+                return parseInt($(b).find('.dislikes-count').text().trim()) - parseInt($(a).find('.dislikes-count').text().trim());
               });
             } else if (sortType === 'oldest') {
               sortedPosts = $('.post-card').sort((a, b) => {
