@@ -39,36 +39,36 @@
         >
         <div class="flex items-center">
           {% if user.is_authenticated %}
-            <div class="flex items-center space-x-2 md:space-x-4">
-              <a
-                href="{% url 'user_profile' user.username %}"
-                class="text-gray-300 hover:text-white border border-slate-500 rounded-md py-1 px-3 md:py-2 md:px-4 hover:bg-slate-700 transition-colors"
-                >Profile</a
-              >
-              <a
-                href="{% url 'create_forum' %}"
-                class="text-gray-300 hover:text-white border border-slate-500 rounded-md py-1 px-3 md:py-2 md:px-4 hover:bg-slate-700 transition-colors"
-                >Post</a
-              >
-              <a
-                href="{% url 'logout' %}"
-                class="text-gray-300 hover:text-white border border-slate-500 rounded-md py-1 px-3 md:py-2 md:px-4 hover:bg-slate-700 transition-colors"
-                >Logout</a
-              >
-            </div>
+          <div class="flex items-center space-x-2 md:space-x-4">
+            <a
+              href="{% url 'user_profile' user.username %}"
+              class="text-gray-300 hover:text-white border border-slate-500 rounded-md py-1 px-3 md:py-2 md:px-4 hover:bg-slate-700 transition-colors"
+              >Profile</a
+            >
+            <a
+              href="{% url 'create_forum' %}"
+              class="text-gray-300 hover:text-white border border-slate-500 rounded-md py-1 px-3 md:py-2 md:px-4 hover:bg-slate-700 transition-colors"
+              >Post</a
+            >
+            <a
+              href="{% url 'logout' %}"
+              class="text-gray-300 hover:text-white border border-slate-500 rounded-md py-1 px-3 md:py-2 md:px-4 hover:bg-slate-700 transition-colors"
+              >Logout</a
+            >
+          </div>
           {% else %}
-            <div class="flex items-center space-x-2 md:space-x-4">
-              <a
-                href="{% url 'login' %}"
-                class="text-gray-300 hover:text-white border border-slate-500 rounded-md py-1 px-3 md:py-2 md:px-4 hover:bg-slate-700 transition-colors"
-                >Login</a
-              >
-              <a
-                href="{% url 'signup' %}"
-                class="bg-blue-600 hover:bg-blue-700 text-white border border-blue-700 rounded-md py-1 px-3 md:py-2 md:px-4 transition-colors"
-                >Sign Up</a
-              >
-            </div>
+          <div class="flex items-center space-x-2 md:space-x-4">
+            <a
+              href="{% url 'login' %}"
+              class="text-gray-300 hover:text-white border border-slate-500 rounded-md py-1 px-3 md:py-2 md:px-4 hover:bg-slate-700 transition-colors"
+              >Login</a
+            >
+            <a
+              href="{% url 'signup' %}"
+              class="bg-blue-600 hover:bg-blue-700 text-white border border-blue-700 rounded-md py-1 px-3 md:py-2 md:px-4 transition-colors"
+              >Sign Up</a
+            >
+          </div>
           {% endif %}
         </div>
       </div>
@@ -81,28 +81,68 @@
         </div>
         <div class="p-6">
           <section class="mb-6">
-            <h2 class="text-xl font-semibold text-white mb-3">1. Introduction</h2>
-            <p class="text-slate-300 mb-2">Welcome to CyberShield ("we," "our," or "us"). These Terms and Conditions govern your access to and use of our website, products, and services. By accessing or using our services, you agree to be bound by these Terms and Conditions.</p>
-            <p class="text-slate-300">Please read these Terms carefully. If you do not agree with any part of these Terms, you may not access or use our services.</p>
+            <h2 class="text-xl font-semibold text-white mb-3">
+              1. Introduction
+            </h2>
+            <p class="text-slate-300 mb-2">
+              Welcome to CyberShield ("we," "our," or "us"). These Terms and
+              Conditions govern your access to and use of our website, products,
+              and services. By accessing or using our services, you agree to be
+              bound by these Terms and Conditions.
+            </p>
+            <p class="text-slate-300">
+              Please read these Terms carefully. If you do not agree with any
+              part of these Terms, you may not access or use our services.
+            </p>
           </section>
 
           <section class="mb-6">
-            <h2 class="text-xl font-semibold text-white mb-3">2. Definitions</h2>
-            <p class="text-slate-300 mb-2">"Service" refers to the website, applications, products, and services provided by CyberShield.</p>
-            <p class="text-slate-300 mb-2">"User," "You," and "Your" refer to the individual or entity accessing or using the Service.</p>
-            <p class="text-slate-300">"Content" refers to text, images, videos, audio, and all other forms of information or data.</p>
+            <h2 class="text-xl font-semibold text-white mb-3">
+              2. Definitions
+            </h2>
+            <p class="text-slate-300 mb-2">
+              "Service" refers to the website, applications, products, and
+              services provided by CyberShield.
+            </p>
+            <p class="text-slate-300 mb-2">
+              "User," "You," and "Your" refer to the individual or entity
+              accessing or using the Service.
+            </p>
+            <p class="text-slate-300">
+              "Content" refers to text, images, videos, audio, and all other
+              forms of information or data.
+            </p>
           </section>
 
           <section class="mb-6">
-            <h2 class="text-xl font-semibold text-white mb-3">3. Account Registration</h2>
-            <p class="text-slate-300 mb-2">To access certain features of our Service, you may need to create an account. You are responsible for maintaining the confidentiality of your account information and for all activities that occur under your account.</p>
-            <p class="text-slate-300 mb-2">You agree to provide accurate and complete information when creating an account and to update your information to keep it accurate and current.</p>
-            <p class="text-slate-300">We reserve the right to suspend or terminate your account if any information provided is found to be inaccurate, incomplete, or violates these Terms.</p>
+            <h2 class="text-xl font-semibold text-white mb-3">
+              3. Account Registration
+            </h2>
+            <p class="text-slate-300 mb-2">
+              To access certain features of our Service, you may need to create
+              an account. You are responsible for maintaining the
+              confidentiality of your account information and for all activities
+              that occur under your account.
+            </p>
+            <p class="text-slate-300 mb-2">
+              You agree to provide accurate and complete information when
+              creating an account and to update your information to keep it
+              accurate and current.
+            </p>
+            <p class="text-slate-300">
+              We reserve the right to suspend or terminate your account if any
+              information provided is found to be inaccurate, incomplete, or
+              violates these Terms.
+            </p>
           </section>
 
           <section class="mb-6">
-            <h2 class="text-xl font-semibold text-white mb-3">4. User Conduct</h2>
-            <p class="text-slate-300 mb-2">When using our Service, you agree not to:</p>
+            <h2 class="text-xl font-semibold text-white mb-3">
+              4. User Conduct
+            </h2>
+            <p class="text-slate-300 mb-2">
+              When using our Service, you agree not to:
+            </p>
             <ul class="list-disc list-inside text-slate-300 ml-4">
               <li>Violate any applicable laws or regulations</li>
               <li>Infringe upon the rights of others</li>
@@ -110,48 +150,109 @@
               <li>Upload or transmit viruses or malicious code</li>
               <li>Attempt to gain unauthorized access to our systems</li>
               <li>Interfere with the proper working of the Service</li>
-              <li>Engage in any activity that could damage, disable, or impair the Service</li>
+              <li>
+                Engage in any activity that could damage, disable, or impair the
+                Service
+              </li>
             </ul>
           </section>
 
           <section class="mb-6">
-            <h2 class="text-xl font-semibold text-white mb-3">5. Intellectual Property</h2>
-            <p class="text-slate-300 mb-2">The Service and its original content, features, and functionality are owned by CyberShield and are protected by international copyright, trademark, patent, trade secret, and other intellectual property laws.</p>
-            <p class="text-slate-300">You may not copy, modify, distribute, sell, or lease any part of our Service without our prior written consent.</p>
+            <h2 class="text-xl font-semibold text-white mb-3">
+              5. Intellectual Property
+            </h2>
+            <p class="text-slate-300 mb-2">
+              The Service and its original content, features, and functionality
+              are owned by CyberShield and are protected by international
+              copyright, trademark, patent, trade secret, and other intellectual
+              property laws.
+            </p>
+            <p class="text-slate-300">
+              You may not copy, modify, distribute, sell, or lease any part of
+              our Service without our prior written consent.
+            </p>
           </section>
 
           <section class="mb-6">
-            <h2 class="text-xl font-semibold text-white mb-3">6. Privacy Policy</h2>
-            <p class="text-slate-300">Your use of our Service is also governed by our Privacy Policy, which is incorporated into these Terms by reference. Please review our Privacy Policy to understand how we collect and use your information.</p>
+            <h2 class="text-xl font-semibold text-white mb-3">
+              6. Privacy Policy
+            </h2>
+            <p class="text-slate-300">
+              Your use of our Service is also governed by our Privacy Policy,
+              which is incorporated into these Terms by reference. Please review
+              our Privacy Policy to understand how we collect and use your
+              information.
+            </p>
           </section>
 
           <section class="mb-6">
-            <h2 class="text-xl font-semibold text-white mb-3">7. Limitation of Liability</h2>
-            <p class="text-slate-300 mb-2">To the maximum extent permitted by law, CyberShield shall not be liable for any indirect, incidental, special, consequential, or punitive damages, or any loss of profits or revenues, whether incurred directly or indirectly.</p>
-            <p class="text-slate-300">CyberShield provides the Service "as is" and "as available" without warranties of any kind, either express or implied.</p>
+            <h2 class="text-xl font-semibold text-white mb-3">
+              7. Limitation of Liability
+            </h2>
+            <p class="text-slate-300 mb-2">
+              To the maximum extent permitted by law, CyberShield shall not be
+              liable for any indirect, incidental, special, consequential, or
+              punitive damages, or any loss of profits or revenues, whether
+              incurred directly or indirectly.
+            </p>
+            <p class="text-slate-300">
+              CyberShield provides the Service "as is" and "as available"
+              without warranties of any kind, either express or implied.
+            </p>
           </section>
 
           <section class="mb-6">
-            <h2 class="text-xl font-semibold text-white mb-3">8. Termination</h2>
-            <p class="text-slate-300 mb-2">We may terminate or suspend your access to our Service immediately, without prior notice or liability, for any reason, including, without limitation, if you breach these Terms.</p>
-            <p class="text-slate-300">Upon termination, your right to use the Service will immediately cease.</p>
+            <h2 class="text-xl font-semibold text-white mb-3">
+              8. Termination
+            </h2>
+            <p class="text-slate-300 mb-2">
+              We may terminate or suspend your access to our Service
+              immediately, without prior notice or liability, for any reason,
+              including, without limitation, if you breach these Terms.
+            </p>
+            <p class="text-slate-300">
+              Upon termination, your right to use the Service will immediately
+              cease.
+            </p>
           </section>
 
           <section class="mb-6">
-            <h2 class="text-xl font-semibold text-white mb-3">9. Changes to Terms</h2>
-            <p class="text-slate-300 mb-2">We reserve the right to modify or replace these Terms at any time. If a revision is material, we will provide at least 30 days' notice before the changes take effect.</p>
-            <p class="text-slate-300">Your continued use of the Service after the changes have been implemented constitutes your acknowledgment and acceptance of the modified Terms.</p>
+            <h2 class="text-xl font-semibold text-white mb-3">
+              9. Changes to Terms
+            </h2>
+            <p class="text-slate-300 mb-2">
+              We reserve the right to modify or replace these Terms at any time.
+              If a revision is material, we will provide at least 30 days'
+              notice before the changes take effect.
+            </p>
+            <p class="text-slate-300">
+              Your continued use of the Service after the changes have been
+              implemented constitutes your acknowledgment and acceptance of the
+              modified Terms.
+            </p>
           </section>
 
           <section class="mb-6">
-            <h2 class="text-xl font-semibold text-white mb-3">10. Governing Law</h2>
-            <p class="text-slate-300">These Terms shall be governed by and construed in accordance with the laws of [Your Jurisdiction], without regard to its conflict of law principles.</p>
+            <h2 class="text-xl font-semibold text-white mb-3">
+              10. Governing Law
+            </h2>
+            <p class="text-slate-300">
+              These Terms shall be governed by and construed in accordance with
+              the laws of [Your Jurisdiction], without regard to its conflict of
+              law principles.
+            </p>
           </section>
 
           <section class="mb-6">
-            <h2 class="text-xl font-semibold text-white mb-3">11. Contact Information</h2>
-            <p class="text-slate-300 mb-2">If you have any questions about these Terms, please contact us at:</p>
-            <p class="text-blue-400 font-semibold">[CyberShieldSupport@gmail.com]</p>
+            <h2 class="text-xl font-semibold text-white mb-3">
+              11. Contact Information
+            </h2>
+            <p class="text-slate-300 mb-2">
+              If you have any questions about these Terms, please contact us at:
+            </p>
+            <p class="text-blue-400 font-semibold">
+              [CyberShieldSupport@gmail.com]
+            </p>
           </section>
         </div>
       </div>
@@ -192,7 +293,7 @@
 
     <!-- Scripts -->
     <script>
-      $(document).ready(function() {
+      $(document).ready(function () {
         // Any scripts can go here
       });
     </script>

@@ -13,9 +13,7 @@ site.disable_action("delete_selected")
 
 # Create initial forum tags if they don't exist
 def create_initial_forum_tags():
-    tags = [
-        
-    ]
+    tags = []
 
     for tag in tags:
         ForumTag.objects.get_or_create(name=tag)
