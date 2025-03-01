@@ -66,7 +66,7 @@
     "model": "forum.customuser",
     "pk": 1,
     "fields": {
-      "password": "pbkdf2_sha256$600000$BNVxhRwkUoUnU7BfypdS6H$2+lpR2o3NqP5xV6yqEW+AEqe1YKV31A+M6w6tHZIuEE=",
+      "password": "pbkdf2_sha256$720000$Xmoat22tAsxQWZD3FSrgP5$eddSuJRsoOO8FGrc/jGhOP7+TglGFOd5nHuFGXzSr+s=",
       "last_login": "2024-01-01T12:00:00Z",
       "is_superuser": false,
       "username": "alice_security",
@@ -84,7 +84,7 @@
     "model": "forum.customuser",
     "pk": 2,
     "fields": {
-      "password": "pbkdf2_sha256$600000$BNVxhRwkUoUnU7BfypdS6H$2+lpR2o3NqP5xV6yqEW+AEqe1YKV31A+M6w6tHZIuEE=",
+      "password": "pbkdf2_sha256$720000$Xmoat22tAsxQWZD3FSrgP5$eddSuJRsoOO8FGrc/jGhOP7+TglGFOd5nHuFGXzSr+s=",
       "last_login": "2024-01-01T12:00:00Z",
       "is_superuser": false,
       "username": "bob_cyber",
@@ -102,7 +102,7 @@
     "model": "forum.customuser",
     "pk": 3,
     "fields": {
-      "password": "pbkdf2_sha256$600000$BNVxhRwkUoUnU7BfypdS6H$2+lpR2o3NqP5xV6yqEW+AEqe1YKV31A+M6w6tHZIuEE=",
+      "password": "pbkdf2_sha256$720000$Xmoat22tAsxQWZD3FSrgP5$eddSuJRsoOO8FGrc/jGhOP7+TglGFOd5nHuFGXzSr+s=",
       "last_login": "2024-01-01T12:00:00Z",
       "is_superuser": false,
       "username": "carol_mod",
@@ -120,7 +120,7 @@
     "model": "forum.customuser",
     "pk": 4,
     "fields": {
-      "password": "pbkdf2_sha256$720000$0fTsq5RjymErWKHjtyGsDL$cuSuhLRyIt86iVPlWFjemdyMdB7hQFrF2AIz/Zo27JU=",
+      "password": "pbkdf2_sha256$720000$Xmoat22tAsxQWZD3FSrgP5$eddSuJRsoOO8FGrc/jGhOP7+TglGFOd5nHuFGXzSr+s=",
       "last_login": "2024-01-01T12:00:00Z",
       "is_superuser": true,
       "username": "MainAdmin",

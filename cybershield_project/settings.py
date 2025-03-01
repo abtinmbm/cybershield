@@ -5,7 +5,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = "6Le1y-IqAAAAAP9K6_Gr8v7Yp_XShGY0a--JWgrv"
 DEBUG = True
-ALLOWED_HOSTS = ["35.182.152.63", "d2r6sxfy47w9d0.cloudfront.net", "ec2-35-182-152-63.ca-central-1.compute.amazonaws.com"]
+ALLOWED_HOSTS = ["127.0.0.1", "35.182.152.63", "d2r6sxfy47w9d0.cloudfront.net"]
 # CSRF Trusted Origins
 CSRF_TRUSTED_ORIGINS = ["http://localhost:8000", "http://127.0.0.1:8000", "https://d2r6sxfy47w9d0.cloudfront.net"]
 
