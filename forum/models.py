@@ -52,7 +52,12 @@ class ForumTag(models.Model):
 class ForumPost(models.Model):
     title = models.CharField(max_length=100)
     content = models.TextField()
-    forum_tag = models.ForeignKey(ForumTag, on_delete=models.CASCADE)
+    forum_tag = models.ForeignKey(
+        ForumTag, 
+        on_delete=models.SET_NULL,  # Changed from CASCADE to SET_NULL
+        null=True,                   # Allow NULL values in database
+        blank=True                   # Allow blank submissions in forms
+    )
     author = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
