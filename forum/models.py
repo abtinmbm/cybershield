@@ -1,6 +1,8 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser, Group, Permission
 from django_ckeditor_5.fields import CKEditor5Field
+from django.core.validators import MinLengthValidator
+
 
 # Identify the user roles
 ROLE_CHOICES = [
@@ -50,8 +52,8 @@ class ForumTag(models.Model):
 
 
 class ForumPost(models.Model):
-    title = models.CharField(max_length=100)
-    content = models.TextField()
+    title = models.CharField(max_length=100, validators=[MinLengthValidator(10)])
+    content = models.TextField(max_length=1000, validators=[MinLengthValidator(50)])
     forum_tag = models.ForeignKey(
         ForumTag, 
         on_delete=models.SET_NULL,  # Changed from CASCADE to SET_NULL
