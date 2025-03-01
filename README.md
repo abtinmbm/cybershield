@@ -32,22 +32,26 @@ To get a local copy up and running follow these simple steps.
    ```sh
    pip install -r requirements.txt
    ```
-4. Apply migrations
+4. Generate migrations
+   ```sh
+   python manage.py makemigrations
+   ```
+5. Apply migrations
    ```sh
    python manage.py migrate
    ```
-5. Create a superuser
+6. Load demo data
    ```sh
-   python manage.py createsuperuser
+   python manage.py loaddata demo
    ```
-6. Run the development server
+7. Run the development server
    ```sh
    python manage.py runserver
    ```
 
 ## Usage
 1. Open your web browser and go to `http://127.0.0.1:8000/`
-2. Register a new account or log in with the superuser account
+2. Register a new account or log in with the superuser account at `http://127.0.0.1:8000/admin` within the demo data (User: MainAdmin Password: Abtin123!!)
 3. Create, view, and interact with forum posts and comments
 4. Use the sorting and filtering options to navigate through the posts
 
