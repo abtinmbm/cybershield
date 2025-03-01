@@ -1,9 +1,9 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>CyberShield - Security Forum</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -12,393 +12,587 @@
     <!-- Fuse.js for search -->
     <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.6.2"></script>
     <style>
-        :root {
-            --dark-blue: #0f172a;
-            --midnight: #1e293b;
-            --highlight: #3b82f6;
-        }
-        body {
-            background-color: var(--dark-blue);
-            color: #e2e8f0;
-        }
-        .post-card {
-            transition: transform 0.2s ease-in-out;
-        }
-        .post-card:hover {
-            transform: translateY(-2px);
-        }
-        .active-tag {
-            background-color: var(--highlight);
-            color: white;
-        }
-        .post-content, .post-replies {
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.5s ease;
-        }
-        .post-content.expanded, .post-replies.expanded {
-            max-height: 2000px;
-        }
+      :root {
+        --dark-blue: #0f172a;
+        --midnight: #1e293b;
+        --highlight: #3b82f6;
+      }
+      body {
+        background-color: var(--dark-blue);
+        color: #e2e8f0;
+      }
+      .post-card {
+        transition: transform 0.2s ease-in-out;
+      }
+      .post-card:hover {
+        transform: translateY(-2px);
+      }
+      .active-tag {
+        background-color: var(--highlight);
+        color: white;
+      }
+      .post-content,
+      .post-replies {
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.5s ease;
+      }
+      .post-content.expanded,
+      .post-replies.expanded {
+        max-height: 2000px;
+      }
+      /* Moderator styling */
+      .moderator-name {
+        color: #60a5fa; /* Bright blue color for moderators */
+        font-weight: 600; /* Make it bold */
+        display: inline-flex;
+        align-items: center;
+      }
+      .moderator-badge {
+        background-color: #1d4ed8; /* Darker blue background */
+        color: white;
+        font-size: 0.7rem;
+        padding: 0.1rem 0.4rem;
+        border-radius: 0.25rem;
+        margin-left: 0.4rem;
+      }
+
     </style>
-</head>
-<body class="min-h-screen flex flex-col">
+  </head>
+  <body class="min-h-screen flex flex-col">
     <!-- Header -->
     <header class="bg-slate-800 py-4 px-6 shadow-lg sticky top-0 z-10">
-        <div class="container mx-auto flex justify-between items-center">
-            <a href="/" class="text-2xl md:text-3xl font-bold text-white tracking-wider">CYBERSHIELD</a>
-            <div class="flex items-center space-x-4">
-                {% if user.is_authenticated %}
-                    <div class="flex items-center">
-                        <span class="hidden md:inline mr-2 text-gray-300">Welcome, {{ user.username }}</span>
-                        <a href="{% url 'create_forum' %}" class="bg-blue-600 hover:bg-blue-700 text-white py-1 px-3 md:py-2 md:px-4 rounded text-sm md:text-base transition-colors">
-                            New Post
-                        </a>
-                        <a href="{% url 'logout' %}" class="ml-2 text-gray-300 hover:text-white">Logout</a>
-                    </div>
-                {% else %}
-                    <div>
-                        <a href="{% url 'login' %}" class="text-gray-300 hover:text-white mr-4">Login</a>
-                        <a href="{% url 'signup' %}" class="bg-blue-600 hover:bg-blue-700 text-white py-1 px-3 md:py-2 md:px-4 rounded text-sm md:text-base transition-colors">Sign Up</a>
-                    </div>
-                {% endif %}
-            </div>
+      <div class="container mx-auto flex justify-between items-center">
+        <a
+          href="/"
+          class="text-2xl md:text-3xl font-bold text-white tracking-wider"
+          >CYBERSHIELD</a
+        >
+        <div class="flex items-center space-x-4">
+          {% if user.is_authenticated %}
+          <div class="flex items-center">
+            <span class="hidden md:inline mr-2 text-gray-300"
+              >Welcome, {{ user.username }}</span
+            >
+            <a
+              href="{% url 'create_forum' %}"
+              class="bg-blue-600 hover:bg-blue-700 text-white py-1 px-3 md:py-2 md:px-4 rounded text-sm md:text-base transition-colors"
+            >
+              New Post
+            </a>
+            <a
+              href="{% url 'logout' %}"
+              class="ml-2 text-gray-300 hover:text-white"
+              >Logout</a
+            >
+          </div>
+          {% else %}
+          <div>
+            <a
+              href="{% url 'login' %}"
+              class="text-gray-300 hover:text-white mr-4"
+              >Login</a
+            >
+            <a
+              href="{% url 'signup' %}"
+              class="bg-blue-600 hover:bg-blue-700 text-white py-1 px-3 md:py-2 md:px-4 rounded text-sm md:text-base transition-colors"
+              >Sign Up</a
+            >
+          </div>
+          {% endif %}
         </div>
+      </div>
     </header>
 
     <main class="container mx-auto flex-grow py-6 px-4 md:px-0">
-        <div class="flex flex-col md:flex-row gap-6">
-            <!-- Sidebar with filters -->
-            <aside class="w-full md:w-64 lg:w-80">
-                <div class="bg-slate-800 rounded-lg shadow-lg p-4 mb-4">
-                    <h2 class="text-xl font-semibold mb-4">Search</h2>
-                    <div class="relative">
-                        <input id="search-input" type="text" placeholder="Search forums..." class="w-full bg-slate-700 text-gray-100 border border-slate-600 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
-                        <div id="search-results" class="absolute left-0 right-0 mt-1 bg-slate-700 rounded-md shadow-lg max-h-60 overflow-y-auto hidden z-10"></div>
-                    </div>
-                </div>
-                
-                <div class="bg-slate-800 rounded-lg shadow-lg p-4">
-                    <h2 class="text-xl font-semibold mb-4">Filter by Topic</h2>
-                    <div class="space-y-2">
-                        <button class="filter-tag active-tag w-full py-2 px-3 rounded-md text-left" data-tag="all">All Topics</button>
-                        {% for tag in forum_tags %}
-                            <button class="filter-tag w-full py-2 px-3 bg-slate-700 hover:bg-slate-600 rounded-md text-left transition-colors" data-tag="{{ tag.id }}">{{ tag.name }}</button>
-                        {% endfor %}
-                    </div>
-                </div>
-            </aside>
-            
-            <!-- Main content -->
-            <div class="flex-grow">
-                <h1 class="text-2xl font-bold mb-6">Recent Discussions</h1>
-                
-                <div id="forum-posts">
-                    {% if forum_posts %}
-                        {% for post in forum_posts %}
-                            <div class="post-card bg-slate-800 rounded-lg shadow-lg mb-4 overflow-hidden" data-tag="{{ post.forum_tag.id }}">
-                                <!-- Post header - always visible -->
-                                <div class="p-4">
-                                    <div class="flex justify-between items-start">
-                                        <h2 class="text-xl font-semibold">{{ post.title }}</h2>
-                                        <span class="bg-slate-700 text-xs px-2 py-1 rounded">{{ post.forum_tag.name }}</span>
-                                    </div>
-                                    <div class="flex justify-between items-center mt-4 text-sm text-slate-400">
-                                        <div class="flex items-center">
-                                            <span>Posted by {{ post.author.username }}</span>
-                                            <span class="mx-2">•</span>
-                                            <span>{{ post.created_at|date:"M d, Y" }}</span>
-                                        </div>
-                                        <div class="flex items-center space-x-4">
-                                            <span>{{ post.forumreply_set.count }} comments</span>
-                                            <div class="flex items-center">
-                                                <button class="like-button mr-1 text-gray-400 hover:text-green-500" data-post-id="{{ post.id }}">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7" />
-                                                    </svg>
-                                                </button>
-                                                <span class="like-count">{{ post.likes.count }}</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <button class="toggle-post mt-3 text-blue-400 hover:text-blue-300 text-sm flex items-center" data-post-id="{{ post.id }}">
-                                        <span class="show-text">See more</span>
-                                        <span class="hide-text hidden">Hide</span>
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="show-icon h-4 w-4 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-                                        </svg>
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="hide-icon h-4 w-4 ml-1 hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7" />
-                                        </svg>
-                                    </button>
-                                </div>
-                                
-                                <!-- Expandable content -->
-                                <div id="content-{{ post.id }}" class="post-content border-t border-slate-700">
-                                    <div class="p-4">
-                                        <div class="text-slate-300">{{ post.content|linebreaks }}</div>
-                                        
-                                        <!-- Replies section -->
-                                        <div class="mt-6 pt-4 border-t border-slate-700">
-                                            <h3 class="text-lg font-medium mb-3">Comments</h3>
-                                            <div class="space-y-4 replies-container">
-                                                {% for reply in post.forumreply_set.all %}
-                                                    <div class="bg-slate-700 rounded p-3">
-                                                        <div class="flex justify-between items-start">
-                                                            <p class="text-sm font-medium">{{ reply.author.username }}</p>
-                                                            <span class="text-xs text-slate-400">{{ reply.created_at|date:"M d, Y" }}</span>
-                                                        </div>
-                                                        <p class="mt-1 text-slate-300">{{ reply.content }}</p>
-                                                        <div class="flex items-center mt-2 text-xs text-slate-400">
-                                                            <button class="flex items-center mr-3 hover:text-green-500 reply-like-button" data-reply-id="{{ reply.id }}">
-                                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V5a2 2 0 00-2-2h-.095c-.5 0-.905.405-.905.905 0 .714-.211 1.412-.608 2.006L7 11v9m7-10h-2M7 20H5a2 2 0 01-2-2v-6a2 2 0 012-2h2.5" />
-                                                                </svg>
-                                                                <span class="reply-like-count">{{ reply.likes.count }}</span>
-                                                            </button>
-                                                        </div>
-                                                    </div>
-                                                {% empty %}
-                                                    <p class="text-sm text-slate-400">No comments yet. Be the first to comment!</p>
-                                                {% endfor %}
-                                            </div>
-                                            
-                                            {% if user.is_authenticated %}
-                                                <form class="mt-4 reply-form" data-post-id="{{ post.id }}">
-                                                    {% csrf_token %}
-                                                    <textarea class="w-full bg-slate-700 text-white border border-slate-600 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-500" rows="3" placeholder="Add a comment..."></textarea>
-                                                    <button type="submit" class="mt-2 bg-blue-600 hover:bg-blue-700 text-white py-1 px-4 rounded text-sm transition-colors">Submit</button>
-                                                </form>
-                                            {% else %}
-                                                <p class="mt-4 text-sm text-slate-400"><a href="{% url 'login' %}" class="text-blue-400 hover:underline">Log in</a> to add a comment.</p>
-                                            {% endif %}
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        {% endfor %}
-                    {% else %}
-                        <div class="bg-slate-800 rounded-lg shadow-lg p-6 text-center">
-                            <p class="text-lg">No posts available. Be the first to start a discussion!</p>
-                            {% if user.is_authenticated %}
-                                <a href="{% url 'create_forum' %}" class="mt-4 inline-block bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded transition-colors">Create Post</a>
-                            {% else %}
-                                <a href="{% url 'signup' %}" class="mt-4 inline-block bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded transition-colors">Sign Up to Post</a>
-                            {% endif %}
-                        </div>
-                    {% endif %}
-                </div>
+      <div class="flex flex-col md:flex-row gap-6">
+        <!-- Sidebar with filters -->
+        <aside class="w-full md:w-64 lg:w-80">
+          <div class="bg-slate-800 rounded-lg shadow-lg p-4 mb-4">
+            <h2 class="text-xl font-semibold mb-4">Search</h2>
+            <div class="relative">
+              <input
+                id="search-input"
+                type="text"
+                placeholder="Search forums..."
+                class="w-full bg-slate-700 text-gray-100 border border-slate-600 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+              <div
+                id="search-results"
+                class="absolute left-0 right-0 mt-1 bg-slate-700 rounded-md shadow-lg max-h-60 overflow-y-auto hidden z-10"
+              ></div>
             </div>
+          </div>
+
+          <div class="bg-slate-800 rounded-lg shadow-lg p-4">
+            <h2 class="text-xl font-semibold mb-4">Filter by Topic</h2>
+            <div class="space-y-2">
+              <button
+                class="filter-tag active-tag w-full py-2 px-3 rounded-md text-left"
+                data-tag="all"
+              >
+                All Topics
+              </button>
+              {% for tag in forum_tags %}
+              <button
+                class="filter-tag w-full py-2 px-3 bg-slate-700 hover:bg-slate-600 rounded-md text-left transition-colors"
+                data-tag="{{ tag.id }}"
+              >
+                {{ tag.name }}
+              </button>
+              {% endfor %}
+            </div>
+          </div>
+        </aside>
+
+        <!-- Main content -->
+        <div class="flex-grow">
+          <h1 class="text-2xl font-bold mb-6">Recent Discussions</h1>
+
+          <div id="forum-posts">
+            {% if forum_posts %} {% for post in forum_posts %}
+            <div
+              class="post-card bg-slate-800 rounded-lg shadow-lg mb-4 overflow-hidden"
+              data-tag="{{ post.forum_tag.id }}"
+            >
+              <!-- Post header - always visible -->
+              <div class="p-4">
+                <div class="flex justify-between items-start">
+                  <h2 class="text-xl font-semibold">{{ post.title }}</h2>
+                  <span class="bg-slate-700 text-xs px-2 py-1 rounded"
+                    >{{ post.forum_tag.name }}</span
+                  >
+                </div>
+                <div
+                  class="flex justify-between items-center mt-4 text-sm text-slate-400"
+                >
+                  <div class="flex items-center">
+                    <span>Posted by 
+                      {% if post.author.role == 'moderator' %}
+                        <a href="{% url 'user_profile' post.author.username %}" class="moderator-name">
+                          {{ post.author.username }}
+                          <span class="moderator-badge">Mod</span>
+                        </a>
+                      {% else %}
+                        <a href="{% url 'user_profile' post.author.username %}" class="text-blue-400 hover:text-blue-300">
+                          {{ post.author.username }}
+                        </a>
+                      {% endif %}
+                    </span>
+                    <span class="mx-2">•</span>
+                    <span>{{ post.created_at|date:"M d, Y" }}</span>
+                  </div>
+                  <div class="flex items-center space-x-4">
+                    <span>{{ post.forumreply_set.count }} comments</span>
+                    <div class="flex items-center">
+                      <button
+                        class="like-button mr-1 text-gray-400 hover:text-green-500"
+                        data-post-id="{{ post.id }}"
+                      >
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          class="h-5 w-5"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke="currentColor"
+                        >
+                          <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="2"
+                            d="M5 15l7-7 7 7"
+                          />
+                        </svg>
+                      </button>
+                      <span class="like-count">{{ post.likes.count }}</span>
+                    </div>
+                  </div>
+                </div>
+                <button
+                  class="toggle-post mt-3 text-blue-400 hover:text-blue-300 text-sm flex items-center"
+                  data-post-id="{{ post.id }}"
+                >
+                  <span class="show-text">See more</span>
+                  <span class="hide-text hidden">Hide</span>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="show-icon h-4 w-4 ml-1"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M19 9l-7 7-7-7"
+                    />
+                  </svg>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="hide-icon h-4 w-4 ml-1 hidden"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M5 15l7-7 7 7"
+                    />
+                  </svg>
+                </button>
+              </div>
+
+              <!-- Expandable content -->
+              <div
+                id="content-{{ post.id }}"
+                class="post-content border-t border-slate-700"
+              >
+                <div class="p-4">
+                  <div class="text-slate-300">
+                    {{ post.content|linebreaks }}
+                  </div>
+
+                  <!-- Replies section -->
+                  <div class="mt-6 pt-4 border-t border-slate-700">
+                    <h3 class="text-lg font-medium mb-3">Comments</h3>
+                    <div class="space-y-4 replies-container">
+                      {% for reply in post.forumreply_set.all %}
+                      <div class="bg-slate-700 rounded p-3">
+                        <div class="flex justify-between items-start">
+                          <p class="text-sm font-medium">
+                            {% if reply.author.role == 'moderator' %}
+                              <a href="{% url 'user_profile' reply.author.username %}" class="moderator-name">
+                                {{ reply.author.username }}
+                                <span class="moderator-badge">Mod</span>
+                              </a>
+                            {% else %}
+                              <a href="{% url 'user_profile' reply.author.username %}" class="text-blue-400 hover:text-blue-300">
+                                {{ reply.author.username }}
+                              </a>
+                            {% endif %}
+                          </p>
+                          <span class="text-xs text-slate-400"
+                            >{{ reply.created_at|date:"M d, Y" }}</span
+                          >
+                        </div>
+                        <p class="mt-1 text-slate-300">{{ reply.content }}</p>
+                        <div
+                          class="flex items-center mt-2 text-xs text-slate-400"
+                        >
+                          <button
+                            class="flex items-center mr-3 hover:text-green-500 reply-like-button"
+                            data-reply-id="{{ reply.id }}"
+                          >
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              class="h-4 w-4 mr-1"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              stroke="currentColor"
+                            >
+                              <path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                stroke-width="2"
+                                d="M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V5a2 2 0 00-2-2h-.095c-.5 0-.905.405-.905.905 0 .714-.211 1.412-.608 2.006L7 11v9m7-10h-2M7 20H5a2 2 0 01-2-2v-6a2 2 0 012-2h2.5"
+                              />
+                            </svg>
+                            <span class="reply-like-count"
+                              >{{ reply.likes.count }}</span
+                            >
+                          </button>
+                        </div>
+                      </div>
+                      {% empty %}
+                      <p class="text-sm text-slate-400">
+                        No comments yet. Be the first to comment!
+                      </p>
+                      {% endfor %}
+                    </div>
+
+                    {% if user.is_authenticated %}
+                    <form class="mt-4 reply-form" data-post-id="{{ post.id }}">
+                      {% csrf_token %}
+                      <textarea
+                        class="w-full bg-slate-700 text-white border border-slate-600 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        rows="3"
+                        placeholder="Add a comment..."
+                      ></textarea>
+                      <button
+                        type="submit"
+                        class="mt-2 bg-blue-600 hover:bg-blue-700 text-white py-1 px-4 rounded text-sm transition-colors"
+                      >
+                        Submit
+                      </button>
+                    </form>
+                    {% else %}
+                    <p class="mt-4 text-sm text-slate-400">
+                      <a
+                        href="{% url 'login' %}"
+                        class="text-blue-400 hover:underline"
+                        >Log in</a
+                      >
+                      to add a comment.
+                    </p>
+                    {% endif %}
+                  </div>
+                </div>
+              </div>
+            </div>
+            {% endfor %} {% else %}
+            <div class="bg-slate-800 rounded-lg shadow-lg p-6 text-center">
+              <p class="text-lg">
+                No posts available. Be the first to start a discussion!
+              </p>
+              {% if user.is_authenticated %}
+              <a
+                href="{% url 'create_forum' %}"
+                class="mt-4 inline-block bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded transition-colors"
+                >Create Post</a
+              >
+              {% else %}
+              <a
+                href="{% url 'signup' %}"
+                class="mt-4 inline-block bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded transition-colors"
+                >Sign Up to Post</a
+              >
+              {% endif %}
+            </div>
+            {% endif %}
+          </div>
         </div>
+      </div>
     </main>
 
     <!-- Footer -->
     <footer class="bg-slate-800 py-8 px-6 mt-12">
-        <div class="container mx-auto">
-            <div class="flex flex-col md:flex-row justify-between items-center">
-                <div class="mb-6 md:mb-0">
-                    <h2 class="text-xl font-bold text-white mb-2">CYBERSHIELD</h2>
-                    <p class="text-slate-400">Your secure space for cybersecurity discussions</p>
-                </div>
-                <div class="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-8">
-                    <a href="{% url 'terms_conditions' %}" class="text-slate-400 hover:text-white">Terms & Conditions</a>
-                    <a href="{% url 'moderator_form' %}" class="text-slate-400 hover:text-white">Become a Moderator</a>
-                </div>
-            </div>
-            <div class="mt-8 pt-6 border-t border-slate-700 text-center">
-                <p class="text-slate-500">&copy; {% now "Y" %} CyberShield. All rights reserved.</p>
-            </div>
+      <div class="container mx-auto">
+        <div class="flex flex-col md:flex-row justify-between items-center">
+          <div class="mb-6 md:mb-0">
+            <h2 class="text-xl font-bold text-white mb-2">CYBERSHIELD</h2>
+            <p class="text-slate-400">
+              Your secure space for cybersecurity discussions
+            </p>
+          </div>
+          <div
+            class="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-8"
+          >
+            <a
+              href="{% url 'terms_conditions' %}"
+              class="text-slate-400 hover:text-white"
+              >Terms & Conditions</a
+            >
+            <a
+              href="{% url 'moderator_form' %}"
+              class="text-slate-400 hover:text-white"
+              >Become a Moderator</a
+            >
+          </div>
         </div>
+        <div class="mt-8 pt-6 border-t border-slate-700 text-center">
+          <p class="text-slate-500">
+            &copy; {% now "Y" %} CyberShield. All rights reserved.
+          </p>
+        </div>
+      </div>
     </footer>
 
     <!-- Scripts -->
     <script>
-        $(document).ready(function() {
-            // Toggle post content
-            $(".toggle-post").click(function() {
-                const postId = $(this).data("post-id");
-                const contentDiv = $(`#content-${postId}`);
-                
-                // Toggle expanded class
-                contentDiv.toggleClass("expanded");
-                
-                // Toggle icons and text
-                $(this).find(".show-text, .hide-text, .show-icon, .hide-icon").toggleClass("hidden");
-            });
-            
-            // Filter by tags
-            $('.filter-tag').on('click', function() {
-                $('.filter-tag').removeClass('active-tag').addClass('bg-slate-700');
-                $(this).addClass('active-tag').removeClass('bg-slate-700');
-                
-                const selectedTag = $(this).data('tag');
-                
-                if (selectedTag === 'all') {
-                    $('.post-card').show();
-                } else {
-                    $('.post-card').hide();
-                    $(`.post-card[data-tag="${selectedTag}"]`).show();
-                }
-            });
-            
-            // Handle reply form submission
-            $(".reply-form").submit(function(e) {
-                e.preventDefault();
-                const postId = $(this).data("post-id");
-                const content = $(this).find("textarea").val();
-                const replyContainer = $(this).closest(".post-content").find(".replies-container");
-                
-                if (!content.trim()) return;
-                
-                // Send AJAX request to save the reply
-                $.ajax({
-                    url: '{% url "add_reply" %}',
-                    type: 'POST',
-                    data: {
-                        'post_id': postId,
-                        'content': content,
-                        'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val()
-                    },
-                    success: function(response) {
-                        // Add the new reply to the DOM
-                        const newReply = `
-                            <div class="bg-slate-700 rounded p-3">
-                                <div class="flex justify-between items-start">
-                                    <p class="text-sm font-medium">${response.author}</p>
-                                    <span class="text-xs text-slate-400">Just now</span>
-                                </div>
-                                <p class="mt-1 text-slate-300">${content}</p>
-                                <div class="flex items-center mt-2 text-xs text-slate-400">
-                                    <button class="flex items-center mr-3 hover:text-green-500">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V5a2 2 0 00-2-2h-.095c-.5 0-.905.405-.905.905 0 .714-.211 1.412-.608 2.006L7 11v9m7-10h-2M7 20H5a2 2 0 01-2-2v-6a2 2 0 012-2h2.5" />
-                                        </svg>
-                                        0
-                                    </button>
-                                </div>
-                            </div>
-                        `;
-                        
-                        // Find the "no comments" paragraph if it exists and remove it
-                        const noCommentsText = replyContainer.find("p.text-sm.text-slate-400");
-                        if (noCommentsText.length) {
-                            noCommentsText.remove();
-                        }
+      $(document).ready(function() {
+          // Toggle post content
+          $(".toggle-post").click(function() {
+              const postId = $(this).data("post-id");
+              const contentDiv = $(`#content-${postId}`);
 
-                        // Add the new reply at the top
-                        replyContainer.prepend(newReply);
-                        
-                        // Clear the textarea
-                        $(`#content-${postId}`).find("textarea").val("");
-                        
-                        // Update comments count
-                        const commentsCountElement = $(`.post-card[data-tag="${postId}"]`).find("span:contains('comments')");
-                        const currentCount = parseInt(commentsCountElement.text());
-                        commentsCountElement.text(`${currentCount + 1} comments`);
-                    },
-                    error: function(xhr, status, error) {
-                        console.error(error);
-                        alert('An error occurred while submitting your reply. Please try again.');
-                    }
-                });
-            });
-            
-            // Like post buttons
-            $(".like-button").click(function() {
-                const postId = $(this).data("post-id");
-                const likeCountElement = $(this).next(".like-count");
-                const currentLikes = parseInt(likeCountElement.text());
-                
-                // Toggle like/unlike (in a real app, this would call an API)
-                $(this).toggleClass("text-green-500 text-gray-400");
-                
-                // For demo purposes, just increment the count
-                // In a real app, you'd send an AJAX request to your backend
-                if ($(this).hasClass("text-green-500")) {
-                    likeCountElement.text(currentLikes + 1);
-                } else {
-                    likeCountElement.text(Math.max(0, currentLikes - 1));
-                }
-            });
-            
-            // Initialize search
-            const searchData = [];
-            {% for post in forum_posts %}
-                searchData.push({
-                    id: {{ post.id }},
-                    title: "{{ post.title|escapejs }}",
-                    content: "{{ post.content|escapejs|truncatechars:100 }}",
-                    author: "{{ post.author.username|escapejs }}",
-                    forum_tag: "{{ post.forum_tag.name|escapejs }}"
-                });
-            {% endfor %}
-            
-            const fuseOptions = {
-                keys: ['title', 'content', 'author', 'forum_tag'],
-                threshold: 0.3
-            };
-            const fuse = new Fuse(searchData, fuseOptions);
-            
-            $('#search-input').on('input', function() {
-                const query = $(this).val();
-                if (query.length < 2) {
-                    $('#search-results').hide();
-                    return;
-                }
-                
-                const results = fuse.search(query);
-                
-                if (results.length > 0) {
-                    let resultsHtml = '';
-                    results.forEach(result => {
-                        resultsHtml += `
-                            <div class="p-3 hover:bg-slate-600 border-b border-slate-600 cursor-pointer" onclick="scrollToPost(${result.item.id})">
-                                <div class="font-medium">${result.item.title}</div>
-                                <div class="text-sm text-slate-400 mt-1">${result.item.content}</div>
-                            </div>
-                        `;
-                    });
-                    
-                    $('#search-results').html(resultsHtml).show();
-                } else {
-                    $('#search-results').html('<div class="p-3">No results found</div>').show();
-                }
-            });
-            
-            $(document).on('click', function(e) {
-                if (!$(e.target).closest('#search-input, #search-results').length) {
-                    $('#search-results').hide();
-                }
-            });
-        });
+              // Toggle expanded class
+              contentDiv.toggleClass("expanded");
 
-        // Function to scroll to a post
-        function scrollToPost(postId) {
-            const postElement = document.querySelector(`.toggle-post[data-post-id="${postId}"]`).closest('.post-card');
-            
-            if (postElement) {
-                postElement.scrollIntoView({ behavior: 'smooth' });
-                
-                // Open the post content automatically
-                const contentDiv = $(`#content-${postId}`);
-                contentDiv.addClass("expanded");
-                
-                // Update toggle button
-                const toggleBtn = $(`.toggle-post[data-post-id="${postId}"]`);
-                toggleBtn.find(".show-text").addClass("hidden");
-                toggleBtn.find(".hide-text").removeClass("hidden");
-                toggleBtn.find(".show-icon").addClass("hidden");
-                toggleBtn.find(".hide-icon").removeClass("hidden");
-                
-                // Highlight the post temporarily
-                postElement.classList.add('ring-2', 'ring-blue-500');
-                setTimeout(() => {
-                    postElement.classList.remove('ring-2', 'ring-blue-500');
-                }, 2000);
-            }
-            
-            // Hide search results
-            $('#search-results').hide();
-        }
+              // Toggle icons and text
+              $(this).find(".show-text, .hide-text, .show-icon, .hide-icon").toggleClass("hidden");
+          });
+
+          // Filter by tags
+          $('.filter-tag').on('click', function() {
+              $('.filter-tag').removeClass('active-tag').addClass('bg-slate-700');
+              $(this).addClass('active-tag').removeClass('bg-slate-700');
+
+              const selectedTag = $(this).data('tag');
+
+              if (selectedTag === 'all') {
+                  $('.post-card').show();
+              } else {
+                  $('.post-card').hide();
+                  $(`.post-card[data-tag="${selectedTag}"]`).show();
+              }
+          });
+
+          // Handle reply form submission
+          $(".reply-form").submit(function(e) {
+              e.preventDefault();
+              const postId = $(this).data("post-id");
+              const content = $(this).find("textarea").val();
+              const replyContainer = $(this).closest(".post-content").find(".replies-container");
+
+              if (!content.trim()) return;
+
+              // Send AJAX request to save the reply
+              $.ajax({
+                  url: '{% url "add_reply" %}',
+                  type: 'POST',
+                  data: {
+                      'post_id': postId,
+                      'content': content,
+                      'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val()
+                  },
+                  success: function(response) {
+                      // Add the new reply to the DOM
+                      const newReply = `
+                          <div class="bg-slate-700 rounded p-3">
+                              <div class="flex justify-between items-start">
+                                  <p class="text-sm font-medium">
+                                    <a href="/user/${response.author}" class="text-blue-400 hover:text-blue-300">
+                                      ${response.author}
+                                    </a>
+                                  </p>
+                                  <span class="text-xs text-slate-400">Just now</span>
+                              </div>
+                              <p class="mt-1 text-slate-300">${content}</p>
+                              <div class="flex items-center mt-2 text-xs text-slate-400">
+                                  <button class="flex items-center mr-3 hover:text-green-500">
+                                      <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V5a2 2 0 00-2-2h-.095c-.5 0-.905.405-.905.905 0 .714-.211 1.412-.608 2.006L7 11v9m7-10h-2M7 20H5a2 2 0 01-2-2v-6a2 2 0 012-2h2.5" />
+                                      </svg>
+                                      0
+                                  </button>
+                              </div>
+                          </div>
+                      `;
+
+                      // Find the "no comments" paragraph if it exists and remove it
+                      const noCommentsText = replyContainer.find("p.text-sm.text-slate-400");
+                      if (noCommentsText.length) {
+                          noCommentsText.remove();
+                      }
+
+                      // Add the new reply at the top
+                      replyContainer.prepend(newReply);
+
+                      // Clear the textarea
+                      $(`#content-${postId}`).find("textarea").val("");
+
+                      // Update comments count
+                      const commentsCountElement = $(`.post-card[data-tag="${postId}"]`).find("span:contains('comments')");
+                      const currentCount = parseInt(commentsCountElement.text());
+                      commentsCountElement.text(`${currentCount + 1} comments`);
+                  },
+                  error: function(xhr, status, error) {
+                      console.error(error);
+                      alert('An error occurred while submitting your reply. Please try again.');
+                  }
+              });
+          });
+
+          // Like post buttons
+          $(".like-button").click(function() {
+              const postId = $(this).data("post-id");
+              const likeCountElement = $(this).next(".like-count");
+              const currentLikes = parseInt(likeCountElement.text());
+
+              // Toggle like/unlike (in a real app, this would call an API)
+              $(this).toggleClass("text-green-500 text-gray-400");
+
+              // For demo purposes, just increment the count
+              // In a real app, you'd send an AJAX request to your backend
+              if ($(this).hasClass("text-green-500")) {
+                  likeCountElement.text(currentLikes + 1);
+              } else {
+                  likeCountElement.text(Math.max(0, currentLikes - 1));
+              }
+          });
+
+          // Initialize search
+          const searchData = [];
+          {% for post in forum_posts %}
+              searchData.push({
+                  id: {{ post.id }},
+                  title: "{{ post.title|escapejs }}",
+                  content: "{{ post.content|escapejs|truncatechars:100 }}",
+                  author: "{{ post.author.username|escapejs }}",
+                  forum_tag: "{{ post.forum_tag.name|escapejs }}"
+              });
+          {% endfor %}
+
+          const fuseOptions = {
+              keys: ['title', 'content', 'author', 'forum_tag'],
+              threshold: 0.3
+          };
+          const fuse = new Fuse(searchData, fuseOptions);
+
+          $('#search-input').on('input', function() {
+              const query = $(this).val();
+              if (query.length < 2) {
+                  $('#search-results').hide();
+                  return;
+              }
+
+              const results = fuse.search(query);
+
+              if (results.length > 0) {
+                  let resultsHtml = '';
+                  results.forEach(result => {
+                      resultsHtml += `
+                          <div class="p-3 hover:bg-slate-600 border-b border-slate-600 cursor-pointer" onclick="scrollToPost(${result.item.id})">
+                              <div class="font-medium">${result.item.title}</div>
+                              <div class="text-sm text-slate-400 mt-1">${result.item.content}</div>
+                          </div>
+                      `;
+                  });
+
+                  $('#search-results').html(resultsHtml).show();
+              } else {
+                  $('#search-results').html('<div class="p-3">No results found</div>').show();
+              }
+          });
+
+          $(document).on('click', function(e) {
+              if (!$(e.target).closest('#search-input, #search-results').length) {
+                  $('#search-results').hide();
+              }
+          });
+      });
+
+      // Function to scroll to a post
+      function scrollToPost(postId) {
+          const postElement = document.querySelector(`.toggle-post[data-post-id="${postId}"]`).closest('.post-card');
+
+          if (postElement) {
+              postElement.scrollIntoView({ behavior: 'smooth' });
+
+              // Open the post content automatically
+              const contentDiv = $(`#content-${postId}`);
+              contentDiv.addClass("expanded");
+
+              // Update toggle button
+              const toggleBtn = $(`.toggle-post[data-post-id="${postId}"]`);
+              toggleBtn.find(".show-text").addClass("hidden");
+              toggleBtn.find(".hide-text").removeClass("hidden");
+              toggleBtn.find(".show-icon").addClass("hidden");
+              toggleBtn.find(".hide-icon").removeClass("hidden");
+
+              // Highlight the post temporarily
+              postElement.classList.add('ring-2', 'ring-blue-500');
+              setTimeout(() => {
+                  postElement.classList.remove('ring-2', 'ring-blue-500');
+              }, 2000);
+          }
+
+          // Hide search results
+          $('#search-results').hide();
+      }
     </script>
-</body>
+  </body>
 </html>

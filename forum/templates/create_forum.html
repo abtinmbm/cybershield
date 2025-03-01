@@ -1,117 +1,157 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Create Forum Post - CyberShield</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        :root {
-            --dark-blue: #0f172a;
-            --midnight: #1e293b;
-            --highlight: #3b82f6;
-        }
-        body {
-            background-color: var(--dark-blue);
-            color: #e2e8f0;
-        }
-        .form-input {
-            background-color: var(--midnight);
-            color: white;
-            border: 1px solid #334155;
-        }
-        .form-input:focus {
-            outline: none;
-            border-color: var(--highlight);
-            ring: 2px;
-            ring-color: var(--highlight);
-        }
+      :root {
+        --dark-blue: #0f172a;
+        --midnight: #1e293b;
+        --highlight: #3b82f6;
+      }
+      body {
+        background-color: var(--dark-blue);
+        color: #e2e8f0;
+      }
+      .form-input {
+        background-color: var(--midnight);
+        color: white;
+        border: 1px solid #334155;
+      }
+      .form-input:focus {
+        outline: none;
+        border-color: var(--highlight);
+        ring: 2px;
+        ring-color: var(--highlight);
+      }
     </style>
-</head>
-<body class="min-h-screen flex flex-col">
+  </head>
+  <body class="min-h-screen flex flex-col">
     <!-- Header -->
     <header class="bg-slate-800 py-4 px-6 shadow-lg">
-        <div class="container mx-auto flex justify-between items-center">
-            <a href="/" class="text-2xl md:text-3xl font-bold text-white tracking-wider">CYBERSHIELD</a>
-            <div class="flex items-center space-x-4">
-                <span class="hidden md:inline text-gray-300">{{ user.username }}</span>
-                <a href="{% url 'logout' %}" class="text-gray-300 hover:text-white">Logout</a>
-            </div>
+      <div class="container mx-auto flex justify-between items-center">
+        <a
+          href="/"
+          class="text-2xl md:text-3xl font-bold text-white tracking-wider"
+          >CYBERSHIELD</a
+        >
+        <div class="flex items-center space-x-4">
+          <span class="hidden md:inline text-gray-300"
+            >{{ user.username }}</span
+          >
+          <a href="{% url 'logout' %}" class="text-gray-300 hover:text-white"
+            >Logout</a
+          >
         </div>
+      </div>
     </header>
 
     <!-- Main Content -->
     <div class="flex-grow container mx-auto px-4 py-8">
-        <div class="max-w-2xl mx-auto bg-slate-800 rounded-lg overflow-hidden shadow-lg">
-            <div class="px-6 py-8">
-                <h1 class="text-2xl font-bold mb-6">Create New Post</h1>
-                
-                <form method="post" class="space-y-6">
-                    {% csrf_token %}
-                    
-                    {% if form.non_field_errors %}
-                    <div class="bg-red-900/50 border border-red-500 text-red-100 px-4 py-3 rounded">
-                        {% for error in form.non_field_errors %}
-                            <p>{{ error }}</p>
-                        {% endfor %}
-                    </div>
-                    {% endif %}
-                    
-                    <div>
-                        <label for="{{ form.title.id_for_label }}" class="block text-sm font-medium mb-1">Title</label>
-                        {{ form.title }}
-                        {% if form.title.errors %}
-                            <p class="text-red-400 text-xs mt-1">{{ form.title.errors.0 }}</p>
-                        {% endif %}
-                    </div>
-                    
-                    <div>
-                        <label for="{{ form.forum_tag.id_for_label }}" class="block text-sm font-medium mb-1">Category</label>
-                        {{ form.forum_tag }}
-                        {% if form.forum_tag.errors %}
-                            <p class="text-red-400 text-xs mt-1">{{ form.forum_tag.errors.0 }}</p>
-                        {% endif %}
-                        <p class="text-xs text-gray-400 mt-1">Select the most relevant category for your post</p>
-                    </div>
-                    
-                    <div>
-                        <label for="{{ form.content.id_for_label }}" class="block text-sm font-medium mb-1">Content</label>
-                        {{ form.content }}
-                        {% if form.content.errors %}
-                            <p class="text-red-400 text-xs mt-1">{{ form.content.errors.0 }}</p>
-                        {% endif %}
-                        <p class="text-xs text-gray-400 mt-1">Provide detailed information to help others understand your post</p>
-                    </div>
-                    
-                    <div>
-                        <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-md">
-                            Post
-                        </button>
-                        <a href="{% url 'forum_list' %}" class="ml-2 text-gray-400 hover:text-white">Cancel</a>
-                    </div>
-                </form>
+      <div
+        class="max-w-2xl mx-auto bg-slate-800 rounded-lg overflow-hidden shadow-lg"
+      >
+        <div class="px-6 py-8">
+          <h1 class="text-2xl font-bold mb-6">Create New Post</h1>
+
+          <form method="post" class="space-y-6">
+            {% csrf_token %} {% if form.non_field_errors %}
+            <div
+              class="bg-red-900/50 border border-red-500 text-red-100 px-4 py-3 rounded"
+            >
+              {% for error in form.non_field_errors %}
+              <p>{{ error }}</p>
+              {% endfor %}
             </div>
+            {% endif %}
+
+            <div>
+              <label
+                for="{{ form.title.id_for_label }}"
+                class="block text-sm font-medium mb-1"
+                >Title</label
+              >
+              {{ form.title }} {% if form.title.errors %}
+              <p class="text-red-400 text-xs mt-1">{{ form.title.errors.0 }}</p>
+              {% endif %}
+            </div>
+
+            <div>
+              <label
+                for="{{ form.forum_tag.id_for_label }}"
+                class="block text-sm font-medium mb-1"
+                >Category</label
+              >
+              {{ form.forum_tag }} {% if form.forum_tag.errors %}
+              <p class="text-red-400 text-xs mt-1">
+                {{ form.forum_tag.errors.0 }}
+              </p>
+              {% endif %}
+              <p class="text-xs text-gray-400 mt-1">
+                Select the most relevant category for your post
+              </p>
+            </div>
+
+            <div>
+              <label
+                for="{{ form.content.id_for_label }}"
+                class="block text-sm font-medium mb-1"
+                >Content</label
+              >
+              {{ form.content }} {% if form.content.errors %}
+              <p class="text-red-400 text-xs mt-1">
+                {{ form.content.errors.0 }}
+              </p>
+              {% endif %}
+              <p class="text-xs text-gray-400 mt-1">
+                Provide detailed information to help others understand your post
+              </p>
+            </div>
+
+            <div>
+              <button
+                type="submit"
+                class="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-md"
+              >
+                Post
+              </button>
+              <a
+                href="{% url 'forum_list' %}"
+                class="ml-2 text-gray-400 hover:text-white"
+                >Cancel</a
+              >
+            </div>
+          </form>
         </div>
+      </div>
     </div>
 
     <!-- Footer -->
     <footer class="bg-slate-800 py-6 px-4">
-        <div class="container mx-auto">
-            <div class="text-center text-sm text-gray-400">
-                <p>&copy; 2025 CyberShield. All rights reserved.</p>
-            </div>
+      <div class="container mx-auto">
+        <div class="text-center text-sm text-gray-400">
+          <p>&copy; 2025 CyberShield. All rights reserved.</p>
         </div>
+      </div>
     </footer>
 
     <script>
-        // Add styling to form elements
-        document.addEventListener('DOMContentLoaded', function() {
-            const formInputs = document.querySelectorAll('input, select, textarea');
-            formInputs.forEach(input => {
-                input.classList.add('form-input', 'w-full', 'px-3', 'py-2', 'rounded-md');
-            });
+      // Add styling to form elements
+      document.addEventListener("DOMContentLoaded", function () {
+        const formInputs = document.querySelectorAll("input, select, textarea");
+        formInputs.forEach((input) => {
+          input.classList.add(
+            "form-input",
+            "w-full",
+            "px-3",
+            "py-2",
+            "rounded-md"
+          );
         });
+      });
     </script>
-</body>
+  </body>
 </html>

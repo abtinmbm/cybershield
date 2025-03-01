@@ -1,0 +1,462 @@
+[
+  {
+    "model": "forum.customuser",
+    "pk": 1,
+    "fields": {
+      "password": "pbkdf2_sha256$600000$Abt123!!$aBcDefGhIjKlMnOpQrStUvWxYz1234567890==",
+      "last_login": "2024-05-01T12:00:00Z",
+      "is_superuser": true,
+      "username": "admin",
+      "first_name": "Super",
+      "last_name": "Admin",
+      "email": "admin@cybershield.com",
+      "is_staff": true,
+      "is_active": true,
+      "date_joined": "2024-04-01T10:00:00Z",
+      "role": "user",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "forum.customuser",
+    "pk": 2,
+    "fields": {
+      "password": "pbkdf2_sha256$720000$password123$aBcDefGhIjKlMnOpQrStUvWxYz1234567890==",
+      "last_login": "2024-05-01T11:00:00Z",
+      "is_superuser": false,
+      "username": "moderator1",
+      "first_name": "Mod",
+      "last_name": "First",
+      "email": "mod1@cybershield.com",
+      "is_staff": true,
+      "is_active": true,
+      "date_joined": "2024-04-01T11:00:00Z",
+      "role": "moderator",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "forum.customuser",
+    "pk": 3,
+    "fields": {
+      "password": "pbkdf2_sha256$720000$password123$aBcDefGhIjKlMnOpQrStUvWxYz1234567890==",
+      "last_login": "2024-05-01T11:30:00Z",
+      "is_superuser": false,
+      "username": "moderator2",
+      "first_name": "Mod",
+      "last_name": "Second",
+      "email": "mod2@cybershield.com",
+      "is_staff": true,
+      "is_active": true,
+      "date_joined": "2024-04-02T11:00:00Z",
+      "role": "moderator",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "forum.customuser",
+    "pk": 4,
+    "fields": {
+      "password": "pbkdf2_sha256$720000$password123$aBcDefGhIjKlMnOpQrStUvWxYz1234567890==",
+      "last_login": "2024-05-01T12:30:00Z",
+      "is_superuser": false,
+      "username": "moderator3",
+      "first_name": "Mod",
+      "last_name": "Third",
+      "email": "mod3@cybershield.com",
+      "is_staff": true,
+      "is_active": true,
+      "date_joined": "2024-04-03T11:00:00Z",
+      "role": "moderator",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "forum.customuser",
+    "pk": 5,
+    "fields": {
+      "password": "pbkdf2_sha256$720000$password123$aBcDefGhIjKlMnOpQrStUvWxYz1234567890==",
+      "last_login": "2024-05-01T13:00:00Z",
+      "is_superuser": false,
+      "username": "user1",
+      "first_name": "Regular",
+      "last_name": "User1",
+      "email": "user1@example.com",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2024-04-05T09:00:00Z",
+      "role": "user",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "forum.customuser",
+    "pk": 6,
+    "fields": {
+      "password": "pbkdf2_sha256$720000$password123$aBcDefGhIjKlMnOpQrStUvWxYz1234567890==",
+      "last_login": "2024-05-01T14:00:00Z",
+      "is_superuser": false,
+      "username": "user2",
+      "first_name": "Regular",
+      "last_name": "User2",
+      "email": "user2@example.com",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2024-04-06T09:00:00Z",
+      "role": "user",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "forum.customuser",
+    "pk": 7,
+    "fields": {
+      "password": "pbkdf2_sha256$720000$password123$aBcDefGhIjKlMnOpQrStUvWxYz1234567890==",
+      "last_login": "2024-05-01T15:00:00Z",
+      "is_superuser": false,
+      "username": "user3",
+      "first_name": "Regular",
+      "last_name": "User3",
+      "email": "user3@example.com",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2024-04-07T09:00:00Z",
+      "role": "user",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "forum.customuser",
+    "pk": 8,
+    "fields": {
+      "password": "pbkdf2_sha256$720000$password123$aBcDefGhIjKlMnOpQrStUvWxYz1234567890==",
+      "last_login": "2024-05-01T16:00:00Z",
+      "is_superuser": false,
+      "username": "user4",
+      "first_name": "Regular",
+      "last_name": "User4",
+      "email": "user4@example.com",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2024-04-08T09:00:00Z",
+      "role": "user",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "forum.customuser",
+    "pk": 9,
+    "fields": {
+      "password": "pbkdf2_sha256$720000$password123$aBcDefGhIjKlMnOpQrStUvWxYz1234567890==",
+      "last_login": "2024-05-01T17:00:00Z",
+      "is_superuser": false,
+      "username": "user5",
+      "first_name": "Regular",
+      "last_name": "User5",
+      "email": "user5@example.com",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2024-04-09T09:00:00Z",
+      "role": "user",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "forum.forumtag",
+    "pk": 1,
+    "fields": {
+      "name": "Cybersecurity News"
+    }
+  },
+  {
+    "model": "forum.forumtag",
+    "pk": 2,
+    "fields": {
+      "name": "Network Security"
+    }
+  },
+  {
+    "model": "forum.forumtag",
+    "pk": 3,
+    "fields": {
+      "name": "Privacy"
+    }
+  },
+  {
+    "model": "forum.moderator",
+    "pk": 1,
+    "fields": {
+      "username": 2,
+      "forum_tag": 1,
+      "bio": "Experienced moderator specializing in cybersecurity topics",
+      "Email": "mod1@cybershield.com",
+      "status": "active"
+    }
+  },
+  {
+    "model": "forum.moderator",
+    "pk": 2,
+    "fields": {
+      "username": 3,
+      "forum_tag": 2,
+      "bio": "Network security expert and moderator",
+      "Email": "mod2@cybershield.com",
+      "status": "active"
+    }
+  },
+  {
+    "model": "forum.moderator",
+    "pk": 3,
+    "fields": {
+      "username": 4,
+      "forum_tag": 3,
+      "bio": "Privacy advocate and forum moderator",
+      "Email": "mod3@cybershield.com",
+      "status": "active"
+    }
+  },
+  {
+    "model": "forum.forumpost",
+    "pk": 1,
+    "fields": {
+      "title": "Latest Cybersecurity Threats 2024",
+      "content": "In this discussion, let's talk about the most recent cybersecurity threats emerging in 2024 and how to protect against them.",
+      "forum_tag": 1,
+      "author": 2,
+      "created_at": "2024-04-15T10:00:00Z",
+      "updated_at": "2024-04-15T10:00:00Z",
+      "likes": [5, 6, 7],
+      "dislikes": []
+    }
+  },
+  {
+    "model": "forum.forumpost",
+    "pk": 2,
+    "fields": {
+      "title": "Securing Home Networks - Best Practices",
+      "content": "What are the best ways to secure your home network against unauthorized access? Share your tips and experiences.",
+      "forum_tag": 2,
+      "author": 3,
+      "created_at": "2024-04-16T11:00:00Z",
+      "updated_at": "2024-04-16T11:00:00Z",
+      "likes": [5, 8],
+      "dislikes": [9]
+    }
+  },
+  {
+    "model": "forum.forumpost",
+    "pk": 3,
+    "fields": {
+      "title": "Privacy Laws Around the World",
+      "content": "Discussion on different privacy laws and regulations across countries and how they affect users online.",
+      "forum_tag": 3,
+      "author": 4,
+      "created_at": "2024-04-17T12:00:00Z",
+      "updated_at": "2024-04-17T12:00:00Z",
+      "likes": [6, 7, 8, 9],
+      "dislikes": []
+    }
+  },
+  {
+    "model": "forum.forumreply",
+    "pk": 1,
+    "fields": {
+      "content": "Ransomware attacks have increased by 300% since last year. Always keep your systems updated!",
+      "author": 5,
+      "post": 1,
+      "created_at": "2024-04-15T11:30:00Z",
+      "updated_at": "2024-04-15T11:30:00Z",
+      "likes": [2, 6],
+      "dislikes": []
+    }
+  },
+  {
+    "model": "forum.forumreply",
+    "pk": 2,
+    "fields": {
+      "content": "AI-powered phishing attempts are becoming increasingly sophisticated. Be extra cautious with emails.",
+      "author": 6,
+      "post": 1,
+      "created_at": "2024-04-15T12:45:00Z",
+      "updated_at": "2024-04-15T12:45:00Z",
+      "likes": [2, 5],
+      "dislikes": []
+    }
+  },
+  {
+    "model": "forum.forumreply",
+    "pk": 3,
+    "fields": {
+      "content": "Supply chain attacks are also on the rise. Organizations need better vetting processes for their vendors.",
+      "author": 7,
+      "post": 1,
+      "created_at": "2024-04-15T14:20:00Z",
+      "updated_at": "2024-04-15T14:20:00Z",
+      "likes": [1, 2, 5],
+      "dislikes": []
+    }
+  },
+  {
+    "model": "forum.forumreply",
+    "pk": 4,
+    "fields": {
+      "content": "I always change the default password on my router and disable WPS for better security.",
+      "author": 6,
+      "post": 2,
+      "created_at": "2024-04-16T13:10:00Z",
+      "updated_at": "2024-04-16T13:10:00Z",
+      "likes": [3],
+      "dislikes": []
+    }
+  },
+  {
+    "model": "forum.forumreply",
+    "pk": 5,
+    "fields": {
+      "content": "Setting up a guest network for visitors is another good practice to protect your main network.",
+      "author": 8,
+      "post": 2,
+      "created_at": "2024-04-16T14:30:00Z",
+      "updated_at": "2024-04-16T14:30:00Z",
+      "likes": [3, 6],
+      "dislikes": []
+    }
+  },
+  {
+    "model": "forum.forumreply",
+    "pk": 6,
+    "fields": {
+      "content": "Don't forget to regularly update your router's firmware to patch security vulnerabilities.",
+      "author": 9,
+      "post": 2,
+      "created_at": "2024-04-16T16:15:00Z",
+      "updated_at": "2024-04-16T16:15:00Z",
+      "likes": [3, 6, 8],
+      "dislikes": []
+    }
+  },
+  {
+    "model": "forum.forumreply",
+    "pk": 7,
+    "fields": {
+      "content": "GDPR in Europe has significantly changed how companies handle user data globally.",
+      "author": 7,
+      "post": 3,
+      "created_at": "2024-04-17T13:20:00Z",
+      "updated_at": "2024-04-17T13:20:00Z",
+      "likes": [4],
+      "dislikes": []
+    }
+  },
+  {
+    "model": "forum.forumreply",
+    "pk": 8,
+    "fields": {
+      "content": "California's CCPA is similar to GDPR but with some key differences in implementation.",
+      "author": 8,
+      "post": 3,
+      "created_at": "2024-04-17T14:45:00Z",
+      "updated_at": "2024-04-17T14:45:00Z",
+      "likes": [4, 7],
+      "dislikes": []
+    }
+  },
+  {
+    "model": "forum.forumreply",
+    "pk": 9,
+    "fields": {
+      "content": "Many countries in Asia are also developing their own privacy frameworks, often inspired by GDPR.",
+      "author": 5,
+      "post": 3,
+      "created_at": "2024-04-17T16:30:00Z",
+      "updated_at": "2024-04-17T16:30:00Z",
+      "likes": [4, 7, 8],
+      "dislikes": []
+    }
+  },
+  {
+    "model": "forum.comment",
+    "pk": 1,
+    "fields": {
+      "content": "Great discussion! Very informative.",
+      "author": 9,
+      "discussion": 1,
+      "created_at": "2024-04-15T17:00:00Z",
+      "updated_at": "2024-04-15T17:00:00Z",
+      "likes": [2, 5]
+    }
+  },
+  {
+    "model": "forum.comment",
+    "pk": 2,
+    "fields": {
+      "content": "Thanks for sharing these tips!",
+      "author": 7,
+      "discussion": 2,
+      "created_at": "2024-04-16T18:00:00Z",
+      "updated_at": "2024-04-16T18:00:00Z",
+      "likes": [3, 6, 8]
+    }
+  },
+  {
+    "model": "forum.comment",
+    "pk": 3,
+    "fields": {
+      "content": "This helps me understand privacy laws better.",
+      "author": 6,
+      "discussion": 3,
+      "created_at": "2024-04-17T19:00:00Z",
+      "updated_at": "2024-04-17T19:00:00Z",
+      "likes": [4, 7]
+    }
+  },
+  {
+    "model": "forum.userprofile",
+    "pk": 1,
+    "fields": {
+      "username": "user1",
+      "bio": "Cybersecurity enthusiast and software developer."
+    }
+  },
+  {
+    "model": "forum.userprofile",
+    "pk": 2,
+    "fields": {
+      "username": "user2",
+      "bio": "Network engineer with 5 years of experience in security."
+    }
+  },
+  {
+    "model": "forum.userprofile",
+    "pk": 3,
+    "fields": {
+      "username": "user3",
+      "bio": "Privacy advocate and technology consultant."
+    }
+  },
+  {
+    "model": "forum.userprofile",
+    "pk": 4,
+    "fields": {
+      "username": "user4",
+      "bio": "Student studying cybersecurity and ethical hacking."
+    }
+  },
+  {
+    "model": "forum.userprofile",
+    "pk": 5,
+    "fields": {
+      "username": "user5",
+      "bio": "IT professional interested in security best practices."
+    }
+  }
+]
