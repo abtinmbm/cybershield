@@ -71,6 +71,8 @@ CyberShield uses Django's built-in authentication system to manage user registra
 - **Enhanced Security**: Adding features like two-factor authentication and advanced user activity monitoring.
 - **Mobile App**: Developing a mobile application to provide a seamless experience on smartphones and tablets.
 - **Community Features**: Introducing features like user badges, reputation points, and private messaging to foster community engagement.
+- **Profanity Filter**: Implelemnt Profanity filter library to ensure a safe environment in CyberShield
+- **Monetization Opportunities**: Introduce ads, donations to users, and subscriptions.
 
 ## Tech Stack Explanation
 - [Django](https://www.djangoproject.com/): Chosen for its robust framework and ease of use in building secure web applications.
