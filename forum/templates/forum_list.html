@@ -230,17 +230,22 @@
           position: fixed;
           z-index: 50;
           right: 1rem;
+          bottom: 1rem; /* Change from top positioning to bottom positioning */
           background-color: #1d4ed8;
-          padding: 0.75rem;
-          border-radius: 0.5rem;
+          padding: 0.5rem; /* Smaller padding for a more compact button */
+          border-radius: 0.25rem; /* Square corners instead of rounded */
           box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-          transition: top 0.3s ease;
-          top: 5rem; /* Initial position */
+          transition: transform 0.3s ease; /* Change from top to transform for smoother animation */
+          width: 2rem; /* Fixed width */
+          height: 2rem; /* Fixed height to make it square */
+          display: flex;
+          align-items: center;
+          justify-content: center;
         }
         
         .hamburger-menu {
-          width: 24px;
-          height: 18px;
+          width: 16px; /* Smaller width */
+          height: 12px; /* Smaller height */
           display: flex;
           flex-direction: column;
           justify-content: space-between;
@@ -270,6 +275,21 @@
           width: 110%;
         }
       }
+      
+      /* Add styles for better search results handling on mobile */
+      #search-results {
+        max-height: 60vh; /* Limit height to prevent covering entire screen */
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch; /* Improve scrolling on iOS */
+      }
+      
+      /* Fix for iOS focus issues */
+      .search-active body {
+        overflow: auto !important;
+        position: static !important;
+        height: auto !important;
+        width: auto !important;
+      }
     </style>
   </head>
   <body class="min-h-screen flex flex-col">
@@ -281,42 +301,38 @@
           class="text-2xl md:text-3xl font-bold text-white tracking-wider"
           >CYBERSHIELD</a
         >
-        <div class="flex items-center space-x-4">
+        <div class="flex items-center">
           {% if user.is_authenticated %}
-          <div class="flex items-center">
-            <span class="hidden md:inline mr-2 text-gray-300"
-              >Welcome, {{ user.username }}</span
-            >
-            <a
-              href="{% url 'user_profile' user.username %}"
-              class="text-gray-300 hover:text-white mr-4"
-              >My Profile</a
-            >
-            <a
-              href="{% url 'create_forum' %}"
-              class="bg-blue-600 hover:bg-blue-700 text-white py-1 px-3 md:py-2 md:px-4 rounded text-sm md:text-base transition-colors"
-            >
-              New Post
-            </a>
-            <a
-              href="{% url 'logout' %}"
-              class="ml-2 text-gray-300 hover:text-white"
-              >Logout</a
-            >
-          </div>
+            <div class="flex items-center space-x-2 md:space-x-4">
+              <a
+                href="{% url 'user_profile' user.username %}"
+                class="text-gray-300 hover:text-white border border-slate-500 rounded-md py-1 px-3 md:py-2 md:px-4 hover:bg-slate-700 transition-colors"
+                >Profile</a
+              >
+              <a
+                href="{% url 'create_forum' %}"
+                class="text-gray-300 hover:text-white border border-slate-500 rounded-md py-1 px-3 md:py-2 md:px-4 hover:bg-slate-700 transition-colors"
+                >Post</a
+              >
+              <a
+                href="{% url 'logout' %}"
+                class="text-gray-300 hover:text-white border border-slate-500 rounded-md py-1 px-3 md:py-2 md:px-4 hover:bg-slate-700 transition-colors"
+                >Logout</a
+              >
+            </div>
           {% else %}
-          <div>
-            <a
-              href="{% url 'login' %}"
-              class="text-gray-300 hover:text-white mr-4"
-              >Login</a
-            >
-            <a
-              href="{% url 'signup' %}"
-              class="bg-blue-600 hover:bg-blue-700 text-white py-1 px-3 md:py-2 md:px-4 rounded text-sm md:text-base transition-colors"
-              >Sign Up</a
-            >
-          </div>
+            <div class="flex items-center space-x-2 md:space-x-4">
+              <a
+                href="{% url 'login' %}"
+                class="text-gray-300 hover:text-white border border-slate-500 rounded-md py-1 px-3 md:py-2 md:px-4 hover:bg-slate-700 transition-colors"
+                >Login</a
+              >
+              <a
+                href="{% url 'signup' %}"
+                class="bg-blue-600 hover:bg-blue-700 text-white border border-blue-700 rounded-md py-1 px-3 md:py-2 md:px-4 transition-colors"
+                >Sign Up</a
+              >
+            </div>
           {% endif %}
         </div>
       </div>
@@ -379,8 +395,6 @@
 
         <!-- Main content -->
         <div class="main-content flex-grow">
-          <h1 class="text-2xl font-bold mb-6">Recent Discussions</h1>
-
           <div id="forum-posts">
             {% if forum_posts %} {% for post in forum_posts %}
             <div
@@ -441,6 +455,10 @@
                     <span>{{ post.forumreply_set.count }} comments</span>
                   </div>
                 </div>
+                <!-- Change from striptags to safe to preserve formatting -->
+                <div class="text-slate-300 line-clamp-2 mb-3 prose prose-invert prose-sm max-w-none">
+                  {{ post.content|safe|truncatewords_html:30 }}
+                </div>
                 <button
                   class="toggle-post mt-3 text-blue-400 hover:text-blue-300 text-sm flex items-center"
                   data-post-id="{{ post.id }}"
@@ -484,8 +502,9 @@
                 class="post-content border-t border-slate-700"
               >
                 <div class="p-4">
+                  <!-- Update the prose class to match discussion_detail -->
                   <div class="prose prose-invert max-w-none">
-                    {{ post.content|linebreaks }}
+                    {{ post.content|safe }}
                   </div>
 
                   <!-- Replies section -->
@@ -693,7 +712,7 @@
                                   </p>
                                   <span class="text-xs text-slate-400">Just now</span>
                               </div>
-                              <p class="mt-1 text-slate-300">${content}</p>
+                              <div class="mt-1 text-slate-300 prose prose-invert prose-sm max-w-none">${content}</div>
                               <div class="flex items-center mt-2 text-xs text-slate-400">
                                   <button class="flex items-center mr-3 hover:text-green-500">
                                       <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -876,25 +895,20 @@
           const toggleBtn = $('.toggle-sidebar');
           
           function updateTogglePosition() {
-              if (window.innerWidth < 768) {
-                  const scrollTop = $(window).scrollTop();
-                  const newTop = Math.max(scrollTop + 16, headerHeight + 16);
-                  toggleBtn.css('top', newTop + 'px');
-              }
+              // No need to adjust position anymore as we're using fixed positioning at the bottom
+              // This function is now just a placeholder in case we need to add functionality later
           }
           
-          // Initial position
-          updateTogglePosition();
+          // Remove initial position call
+          // updateTogglePosition();
           
-          // Update on scroll
-          $(window).scroll(updateTogglePosition);
+          // Remove scroll event handler that was updating the position
+          // $(window).scroll(updateTogglePosition);
           
-          // Update on resize
+          // Only keep resize handler to handle potential orientation changes
           $(window).resize(function() {
               if (window.innerWidth >= 768) {
-                  toggleBtn.css('top', '');
-              } else {
-                  updateTogglePosition();
+                  $('.toggle-sidebar').css('transform', ''); // Reset any transform
               }
           });
 
@@ -952,36 +966,152 @@
                   });
               }
           });
+
+          // Improved search handling for mobile
+          $('#search-input').on('focus', function() {
+              $('body').addClass('search-active');
+          });
+          
+          $('#search-input').on('blur', function() {
+              setTimeout(function() {
+                  if (!$('#search-results:hover').length) {
+                      $('#search-results').hide();
+                      // Ensure body returns to normal state
+                      $('body').removeClass('search-active');
+                  }
+              }, 200);
+          });
+          
+          $('#search-input').on('input', function() {
+              // ...existing search code...
+              
+              // Ensure body scroll state is maintained
+              $('body').addClass('search-active');
+              
+              // Make sure search results don't prevent scrolling
+              if (query.length < 2) {
+                  $('#search-results').hide();
+                  return;
+              }
+              
+              // ...rest of the existing search code...
+          });
+          
+          // Ensure clicking outside search properly restores scrolling
+          $(document).on('click', function(e) {
+              if (!$(e.target).closest('#search-input, #search-results').length) {
+                  $('#search-results').hide();
+                  $('body').removeClass('search-active');
+              }
+          });
+          
+          // Update scrollToPost to maintain scroll behavior
+          window.scrollToPost = function(postId) {
+              const postElement = document.querySelector(`.toggle-post[data-post-id="${postId}"]`).closest('.post-card');
+              
+              if (postElement) {
+                  // Ensure scrolling is enabled
+                  $('body').removeClass('search-active');
+                  
+                  // Close search results before scrolling
+                  $('#search-results').hide();
+                  
+                  // Add a small delay to ensure UI is ready before scrolling
+                  setTimeout(function() {
+                      postElement.scrollIntoView({ behavior: 'smooth' });
+                      
+                      // Open the post content automatically
+                      const contentDiv = $(`#content-${postId}`);
+                      contentDiv.addClass("expanded");
+                      
+                      // Update toggle button
+                      const toggleBtn = $(`.toggle-post[data-post-id="${postId}"]`);
+                      toggleBtn.find(".show-text").addClass("hidden");
+                      toggleBtn.find(".hide-text").removeClass("hidden");
+                      toggleBtn.find(".show-icon").addClass("hidden");
+                      toggleBtn.find(".hide-icon").removeClass("hidden");
+                      
+                      // Highlight the post temporarily
+                      postElement.classList.add('ring-2', 'ring-blue-500');
+                      setTimeout(() => {
+                          postElement.classList.remove('ring-2', 'ring-blue-500');
+                      }, 2000);
+                  }, 100);
+              }
+          };
       });
-
-      // Function to scroll to a post
-      function scrollToPost(postId) {
-          const postElement = document.querySelector(`.toggle-post[data-post-id="${postId}"]`).closest('.post-card');
-
-          if (postElement) {
-              postElement.scrollIntoView({ behavior: 'smooth' });
-
-              // Open the post content automatically
-              const contentDiv = $(`#content-${postId}`);
-              contentDiv.addClass("expanded");
-
-              // Update toggle button
-              const toggleBtn = $(`.toggle-post[data-post-id="${postId}"]`);
-              toggleBtn.find(".show-text").addClass("hidden");
-              toggleBtn.find(".hide-text").removeClass("hidden");
-              toggleBtn.find(".show-icon").addClass("hidden");
-              toggleBtn.find(".hide-icon").removeClass("hidden");
-
-              // Highlight the post temporarily
-              postElement.classList.add('ring-2', 'ring-blue-500');
-              setTimeout(() => {
-                  postElement.classList.remove('ring-2', 'ring-blue-500');
-              }, 2000);
-          }
-
-          // Hide search results
-          $('#search-results').hide();
-      }
     </script>
+
+    <!-- Add Tailwind Typography plugin styles for better rich content rendering -->
+    <style>
+      /* Basic prose styling for rich content */
+      .prose img {
+        max-width: 100%;
+        height: auto;
+        border-radius: 0.375rem;
+      }
+      
+      .prose h1, .prose h2, .prose h3, .prose h4, .prose h5, .prose h6 {
+        color: #f8fafc;
+        margin-top: 1.5em;
+        margin-bottom: 0.75em;
+        font-weight: 600;
+      }
+      
+      .prose p {
+        margin-top: 1em;
+        margin-bottom: 1em;
+      }
+      
+      .prose ul, .prose ol {
+        margin-top: 1em;
+        margin-bottom: 1em;
+        padding-left: 1.5em;
+      }
+      
+      .prose ul {
+        list-style-type: disc;
+      }
+      
+      .prose ol {
+        list-style-type: decimal;
+      }
+      
+      .prose a {
+        color: #60a5fa;
+        text-decoration: underline;
+      }
+      
+      .prose strong, .prose b {
+        font-weight: 600;
+        color: #f1f5f9;
+      }
+      
+      .prose-sm {
+        font-size: 0.875rem;
+      }
+      
+      .prose blockquote {
+        border-left: 4px solid #475569;
+        padding-left: 1em;
+        font-style: italic;
+        margin: 1em 0;
+      }
+      
+      .prose code {
+        background-color: #1e293b;
+        padding: 0.2em 0.4em;
+        border-radius: 0.25rem;
+        font-size: 0.875em;
+      }
+      
+      .prose pre {
+        background-color: #1e293b;
+        padding: 1em;
+        border-radius: 0.375rem;
+        overflow-x: auto;
+        margin: 1em 0;
+      }
+    </style>
   </body>
 </html>

@@ -13,239 +13,431 @@
         --midnight: #1e293b;
         --highlight: #3b82f6;
       }
+      
       body {
         background-color: var(--dark-blue);
         color: #e2e8f0;
+        background-image: 
+          radial-gradient(circle at 30% 20%, rgba(29, 78, 216, 0.15) 0%, transparent 30%),
+          radial-gradient(circle at 80% 70%, rgba(30, 64, 175, 0.1) 0%, transparent 25%);
+        background-attachment: fixed;
       }
+      
+      /* Card styling with subtle animation */
+      .signup-card {
+        background: linear-gradient(145deg, #1e293b, #111827);
+        border-radius: 1.5rem;
+        box-shadow: 
+          0 25px 50px -12px rgba(0, 0, 0, 0.3),
+          0 0 0 1px rgba(255, 255, 255, 0.05);
+        overflow: hidden;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+      }
+      
+      .signup-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 
+          0 30px 60px -12px rgba(0, 0, 0, 0.4),
+          0 0 0 1px rgba(255, 255, 255, 0.1);
+      }
+      
+      /* Form input styling */
       .form-input {
-        background-color: #1e293b;
+        background-color: rgba(15, 23, 42, 0.6);
         border: 1px solid #334155;
         color: white;
+        border-radius: 0.5rem;
+        padding: 0.75rem 1rem;
+        width: 100%;
+        transition: all 0.2s ease;
       }
+      
       .form-input:focus {
         border-color: var(--highlight);
         outline: none;
-        ring: 2px;
-        ring-color: var(--highlight);
+        box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.3);
+      }
+      
+      /* Button styling with gradient and shine effect */
+      .signup-btn {
+        background: linear-gradient(90deg, #3b82f6, #1d4ed8);
+        border-radius: 0.5rem;
+        padding: 0.75rem 1.5rem;
+        color: white;
+        font-weight: 600;
+        transition: all 0.2s ease;
+        position: relative;
+        overflow: hidden;
+        width: 100%;
+      }
+      
+      .signup-btn::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+        transition: left 0.7s;
+      }
+      
+      .signup-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
+      }
+      
+      .signup-btn:hover::after {
+        left: 100%;
+      }
+      
+      /* Custom file input */
+      .file-input-label {
+        background-color: rgba(15, 23, 42, 0.8);
+        color: #e2e8f0;
+        border: 1px dashed #4b5563;
+        border-radius: 0.5rem;
+        padding: 0.75rem 1rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: all 0.2s ease;
+      }
+      
+      .file-input-label:hover {
+        background-color: rgba(30, 41, 59, 0.8);
+        border-color: #60a5fa;
+      }
+      
+      /* Section dividers */
+      .section-divider {
+        position: relative;
+        height: 1px;
+        background-color: #334155;
+        margin: 2rem 0;
+      }
+      
+      .section-divider::before {
+        content: attr(data-content);
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background-color: #1e293b;
+        padding: 0 1rem;
+        color: #94a3b8;
+        font-size: 0.875rem;
+      }
+      
+      /* Error message styling */
+      .error-message {
+        animation: pulse 1.5s infinite;
+      }
+      
+      @keyframes pulse {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0.8; }
+      }
+      
+     
+      
+      /* Logo styling */
+      .logo {
+        background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+        border-radius: 1rem;
+        padding: 1.25rem;
+        display: inline-block;
+        box-shadow: 0 10px 15px -3px rgba(29, 78, 216, 0.3);
       }
     </style>
   </head>
   <body class="min-h-screen flex flex-col">
     <!-- Header -->
-    <header class="bg-slate-800 py-4 px-6 shadow-lg">
+    <header class="bg-slate-800 py-4 px-6 shadow-lg sticky top-0 z-10">
       <div class="container mx-auto flex justify-between items-center">
         <a
           href="/"
           class="text-2xl md:text-3xl font-bold text-white tracking-wider"
           >CYBERSHIELD</a
         >
-        <div>
-          <a
-            href="{% url 'login' %}"
-            class="bg-blue-600 hover:bg-blue-700 text-white py-1 px-3 md:py-2 md:px-4 rounded text-sm md:text-base transition-colors"
-            >Log In</a
-          >
+        <div class="flex items-center">
+          {% if user.is_authenticated %}
+            <div class="flex items-center space-x-2 md:space-x-4">
+              <a
+                href="{% url 'user_profile' user.username %}"
+                class="text-gray-300 hover:text-white border border-slate-500 rounded-md py-1 px-3 md:py-2 md:px-4 hover:bg-slate-700 transition-colors"
+                >Profile</a
+              >
+              <a
+                href="{% url 'create_forum' %}"
+                class="text-gray-300 hover:text-white border border-slate-500 rounded-md py-1 px-3 md:py-2 md:px-4 hover:bg-slate-700 transition-colors"
+                >Post</a
+              >
+              <a
+                href="{% url 'logout' %}"
+                class="text-gray-300 hover:text-white border border-slate-500 rounded-md py-1 px-3 md:py-2 md:px-4 hover:bg-slate-700 transition-colors"
+                >Logout</a
+              >
+            </div>
+          {% else %}
+            <div class="flex items-center space-x-2 md:space-x-4">
+              <a
+                href="{% url 'login' %}"
+                class="text-gray-300 hover:text-white border border-slate-500 rounded-md py-1 px-3 md:py-2 md:px-4 hover:bg-slate-700 transition-colors"
+                >Login</a
+              >
+              <a
+                href="{% url 'signup' %}"
+                class="bg-blue-600 hover:bg-blue-700 text-white border border-blue-700 rounded-md py-1 px-3 md:py-2 md:px-4 transition-colors"
+                >Sign Up</a
+              >
+            </div>
+          {% endif %}
         </div>
       </div>
     </header>
 
     <!-- Main Content -->
-    <div class="flex-grow container mx-auto px-4 py-8">
-      <div
-        class="max-w-md mx-auto bg-slate-800 rounded-lg overflow-hidden shadow-lg"
-      >
-        <div class="px-6 py-8">
-          <h1 class="text-2xl font-bold text-center mb-6">
-            Create Your Account
-          </h1>
+    <div class="flex-grow flex justify-center items-center px-4 py-12">
+      <div class="max-w-2xl w-full signup-card">
+        <div class="px-6 py-8 md:px-8">
+          <div class="text-center mb-8">
+            <div class="logo mb-4 mx-auto">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-white" viewBox="0 0 20 20" fill="currentColor">
+                <path d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" />
+              </svg>
+            </div>
+            <h1 class="text-2xl md:text-3xl font-bold text-white">Create Your Account</h1>
+            <p class="text-blue-300 mt-2">Join our community of cybersecurity enthusiasts</p>
+          </div>
+
+          {% if form.non_field_errors %}
+          <div class="bg-red-900/50 border border-red-500 text-red-100 px-4 py-3 rounded-lg mb-6 error-message">
+            {% for error in form.non_field_errors %}
+            <p class="flex items-center">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+              </svg>
+              {{ error }}
+            </p>
+            {% endfor %}
+          </div>
+          {% endif %}
 
           <form method="post" enctype="multipart/form-data" class="space-y-6">
-            {% csrf_token %} {% if form.non_field_errors %}
-            <div
-              class="bg-red-900/50 border border-red-500 text-red-100 px-4 py-3 rounded"
-            >
-              {% for error in form.non_field_errors %}
-              <p>{{ error }}</p>
-              {% endfor %}
-            </div>
-            {% endif %}
+            {% csrf_token %}
 
-            <div>
-              <label
-                for="{{ form.username.id_for_label }}"
-                class="block text-sm font-medium mb-1"
-                >Username</label
-              >
-              {{ form.username }} {% if form.username.errors %}
-              <p class="text-red-400 text-xs mt-1">
-                {{ form.username.errors.0 }}
-              </p>
-              {% endif %}
-            </div>
+            <!-- Account Section -->
+            <div class="space-y-4">
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="space-y-1">
+                  <label for="id_username" class="block text-sm font-medium text-blue-300">Username</label>
+                  {{ form.username }}
+                  {% if form.username.errors %}
+                  <p class="text-red-400 text-xs mt-1 flex items-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" viewBox="0 0 20 20" fill="currentColor">
+                      <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+                    </svg>
+                    {{ form.username.errors.0 }}
+                  </p>
+                  {% endif %}
+                </div>
 
-            <div>
-              <label
-                for="{{ form.email.id_for_label }}"
-                class="block text-sm font-medium mb-1"
-                >Email</label
-              >
-              {{ form.email }} {% if form.email.errors %}
-              <p class="text-red-400 text-xs mt-1">{{ form.email.errors.0 }}</p>
-              {% endif %}
-            </div>
-
-            <div>
-              <label
-                for="{{ form.password1.id_for_label }}"
-                class="block text-sm font-medium mb-1"
-                >Password</label
-              >
-              {{ form.password1 }} {% if form.password1.errors %}
-              <p class="text-red-400 text-xs mt-1">
-                {{ form.password1.errors.0 }}
-              </p>
-              {% endif %}
-              <p class="text-xs text-gray-400 mt-1">
-                Your password must be at least 8 characters long and contain
-                letters and numbers.
-              </p>
-            </div>
-
-            <div>
-              <label
-                for="{{ form.password2.id_for_label }}"
-                class="block text-sm font-medium mb-1"
-                >Confirm Password</label
-              >
-              {{ form.password2 }} {% if form.password2.errors %}
-              <p class="text-red-400 text-xs mt-1">
-                {{ form.password2.errors.0 }}
-              </p>
-              {% endif %}
-            </div>
-
-            <div>
-              <label
-                for="{{ form.bio.id_for_label }}"
-                class="block text-sm font-medium mb-1"
-                >Bio (Optional)</label
-              >
-              {{ form.bio }} {% if form.bio.errors %}
-              <p class="text-red-400 text-xs mt-1">{{ form.bio.errors.0 }}</p>
-              {% endif %}
-            </div>
-
-            <div>
-              <label
-                for="{{ form.profile_pic.id_for_label }}"
-                class="block text-sm font-medium mb-1"
-                >Profile Picture (Optional)</label
-              >
-              <div class="flex items-center space-x-2">
-                <label
-                  class="w-full flex items-center justify-center px-4 py-2 border border-gray-600 rounded-lg cursor-pointer bg-gray-700 hover:bg-gray-600 transition-colors"
-                >
-                  <svg
-                    class="w-5 h-5 mr-2"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"
-                    ></path>
-                  </svg>
-                  <span>Choose File</span>
-                  {{ form.profile_pic }}
-                </label>
+                <div class="space-y-1">
+                  <label for="id_email" class="block text-sm font-medium text-blue-300">Email</label>
+                  {{ form.email }}
+                  {% if form.email.errors %}
+                  <p class="text-red-400 text-xs mt-1 flex items-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" viewBox="0 0 20 20" fill="currentColor">
+                      <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+                    </svg>
+                    {{ form.email.errors.0 }}
+                  </p>
+                  {% endif %}
+                  <p class="text-xs text-slate-500">We'll never share your email.</p>
+                </div>
               </div>
-              <p id="file-name" class="text-xs text-gray-400 mt-1">
-                No file chosen
-              </p>
-              {% if form.profile_pic.errors %}
-              <p class="text-red-400 text-xs mt-1">
-                {{ form.profile_pic.errors.0 }}
-              </p>
-              {% endif %}
-            </div>
 
-            <div>
-              {{ form.captcha }}
-              {% if form.captcha.errors %}
-              <p class="text-red-400 text-xs mt-1">{{ form.captcha.errors.0 }}</p>
-              {% endif %}
-            </div>
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="space-y-1">
+                  <label for="id_password1" class="block text-sm font-medium text-blue-300">Password</label>
+                  {{ form.password1 }}
+                  {% if form.password1.errors %}
+                  <p class="text-red-400 text-xs mt-1 flex items-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" viewBox="0 0 20 20" fill="currentColor">
+                      <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+                    </svg>
+                    {{ form.password1.errors.0 }}
+                  </p>
+                  {% endif %}
+                </div>
 
-            <div>
-              <button
-                type="submit"
-                class="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-md font-medium transition-colors"
-              >
+                <div class="space-y-1">
+                  <label for="id_password2" class="block text-sm font-medium text-blue-300">Confirm Password</label>
+                  {{ form.password2 }}
+                  {% if form.password2.errors %}
+                  <p class="text-red-400 text-xs mt-1 flex items-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" viewBox="0 0 20 20" fill="currentColor">
+                      <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+                    </svg>
+                    {{ form.password2.errors.0 }}
+                  </p>
+                  {% endif %}
+                </div>
+              </div>
+              <p class="text-xs text-slate-400 mt-1 pl-1">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 inline-block mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                Password must be at least 8 characters long and contain letters and numbers.
+              </p>
+            </div>
+            
+            <div class="section-divider" data-content="Profile Information"></div>
+
+            <!-- Profile Information Section -->
+            <div class="space-y-4">
+              <div class="space-y-1">
+                </label>
+                {% if form.profile_pic.errors %}
+                <p class="text-red-400 text-xs mt-1 flex items-center">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+                  </svg>
+                  {{ form.profile_pic.errors.0 }}
+                </p>
+                {% endif %}
+              </div>
+
+              <div class="space-y-1">
+                <label for="id_bio" class="block text-sm font-medium text-blue-300">Bio (Optional)</label>
+                {{ form.bio }}
+                {% if form.bio.errors %}
+                <p class="text-red-400 text-xs mt-1 flex items-center">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+                  </svg>
+                  {{ form.bio.errors.0 }}
+                </p>
+                {% endif %}
+                <p class="text-xs text-slate-500">Tell the community a bit about yourself.</p>
+              </div>
+
+              <!-- CAPTCHA field -->
+              <div class="space-y-1">
+                <label class="block text-sm font-medium text-blue-300">Verification</label>
+                {{ form.captcha }}
+                {% if form.captcha.errors %}
+                <p class="text-red-400 text-xs mt-1 flex items-center">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+                  </svg>
+                  {{ form.captcha.errors.0 }}
+                </p>
+                {% endif %}
+              </div>
+            </div>
+            
+            <div class="pt-4">
+              <button type="submit" class="signup-btn">
                 Create Account
               </button>
             </div>
           </form>
         </div>
 
-        <div class="px-6 py-4 bg-slate-700/50 border-t border-slate-700">
-          <p class="text-sm text-center text-slate-300">
-            Already have an account?
-            <a
-              href="{% url 'login' %}"
-              class="text-blue-400 hover:text-blue-300"
-              >Log in here</a
-            >
-          </p>
+        <div class="px-8 py-6 bg-slate-800/30 border-t border-slate-700/50 text-center">
+          <div class="space-y-4">
+            <p class="text-blue-200">
+              Already have an account?
+              <a href="{% url 'login' %}" class="text-blue-400 hover:text-blue-300 font-medium">
+                Sign in now
+              </a>
+            </p>
+          </div>
         </div>
       </div>
     </div>
 
     <!-- Footer -->
-    <footer class="bg-slate-800 py-6 px-4">
+    <footer class="bg-slate-800 py-8 px-6 mt-12">
       <div class="container mx-auto">
         <div class="flex flex-col md:flex-row justify-between items-center">
           <div class="mb-6 md:mb-0">
-            <p class="text-sm text-gray-400">
-              &copy; 2025 CyberShield. All rights reserved.
+            <h2 class="text-xl font-bold text-white mb-2">CYBERSHIELD</h2>
+            <p class="text-slate-400">
+              Your secure space for cybersecurity discussions
             </p>
           </div>
-          <div class="flex space-x-6">
+          <div
+            class="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-8"
+          >
             <a
               href="{% url 'terms_conditions' %}"
-              class="text-sm text-gray-400 hover:text-white transition-colors"
+              class="text-slate-400 hover:text-white"
               >Terms & Conditions</a
             >
             <a
               href="{% url 'moderator_form' %}"
-              class="text-sm text-gray-400 hover:text-white transition-colors"
+              class="text-slate-400 hover:text-white"
               >Become a Moderator</a
             >
           </div>
+        </div>
+        <div class="mt-8 pt-6 border-t border-slate-700 text-center">
+          <p class="text-slate-500">
+            &copy; {% now "Y" %} CyberShield. All rights reserved.
+          </p>
         </div>
       </div>
     </footer>
 
     <script>
-      $(document).ready(function () {
-        // Add styling to Django form elements
-        $("#id_username, #id_email, #id_password1, #id_password2").addClass(
-          "form-input w-full px-3 py-2 rounded-md"
-        );
-        $("#id_bio").addClass("form-input w-full px-3 py-2 rounded-md h-24");
+      $(document).ready(function() {
+        // Add styling to form inputs
+        $("#id_username, #id_email, #id_password1, #id_password2").addClass("form-input")
+          .attr("placeholder", function() {
+            // Use the label text as placeholder
+            return $(this).prev('label').text();
+          });
+          
+        $("#id_bio").addClass("form-input h-24 resize-y")
+          .attr("placeholder", "Share your cybersecurity experience or interests...");
+          
+        // Hide the default file input and style the custom one
         $("#id_profile_pic").addClass("hidden");
-
-        // Show filename when a file is selected
-        $("#id_profile_pic").change(function () {
-          const fileName = $(this).val().split("\\").pop();
-          if (fileName) {
-            $("#file-name").text(fileName);
-          } else {
-            $("#file-name").text("No file chosen");
+        
+        // Preview profile picture on selection
+        $("#id_profile_pic").change(function() {
+          const file = this.files[0];
+          if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+              $('#profile-preview .placeholder').remove();
+              
+              // Check if image already exists
+              if ($('#profile-preview img').length) {
+                $('#profile-preview img').attr('src', e.target.result);
+              } else {
+                $('#profile-preview').append('<img src="' + e.target.result + '" alt="Profile Preview">');
+              }
+              
+              // Update file name
+              $('#file-label').text(file.name);
+            };
+            reader.readAsDataURL(file);
+            
+            // Add success styling to the file input
+            $('.file-input-label').addClass('border-green-500 bg-green-900/20').removeClass('border-dashed');
           }
+        });
+        
+        // Add focus effects
+        $(".form-input").focus(function() {
+          $(this).addClass('ring-2 ring-blue-500/30');
+        }).blur(function() {
+          $(this).removeClass('ring-2 ring-blue-500/30');
         });
       });
     </script>
