@@ -319,6 +319,15 @@
         height: auto !important;
         width: auto !important;
       }
+      .header-content {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+      }
+      .header-content a {
+        margin-bottom: 0.5rem;
+      }
     </style>
   </head>
   <body class="min-h-screen flex flex-col">
@@ -920,6 +929,47 @@
                   $('.toggle-sidebar').removeClass('active');
                   $('.sidebar-overlay').removeClass('active');
                   $('.toggle-sidebar svg').html('<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />');
+              }
+          });
+
+          // Add scroll lock when sidebar is open on mobile
+          function toggleScrollLock(lock) {
+              if (lock) {
+                  $('body').css('overflow', 'hidden');
+              } else {
+                  $('body').css('overflow', '');
+              }
+          }
+
+          $('.toggle-sidebar').click(function() {
+              if (window.innerWidth < 768) {
+                  toggleScrollLock($(this).hasClass('active'));
+              }
+          });
+
+          $('.sidebar-overlay').click(function() {
+              toggleScrollLock(false);
+          });
+
+          // Handle window resize
+          $(window).resize(function() {
+              if (window.innerWidth >= 768) {
+                  $('.sidebar-overlay').removeClass('active');
+                  toggleScrollLock(false);
+              }
+          });
+
+          // Ensure scroll lock is removed when filters are used
+          $('.filter-tag').on('click', function() {
+              if (window.innerWidth < 768) {
+                  toggleScrollLock(false);
+              }
+          });
+
+          // Ensure scroll lock is removed when selecting a search result
+          $('#search-results').on('click', 'div', function() {
+              if (window.innerWidth < 768) {
+                  toggleScrollLock(false);
               }
           });
 
