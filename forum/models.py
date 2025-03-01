@@ -53,7 +53,7 @@ class ForumTag(models.Model):
 
 class ForumPost(models.Model):
     title = models.CharField(max_length=100, validators=[MinLengthValidator(10)])
-    content = models.TextField(max_length=1000, validators=[MinLengthValidator(50)])
+    content = models.TextField(max_length=9999999, validators=[MinLengthValidator(50)])
     forum_tag = models.ForeignKey(
         ForumTag, 
         on_delete=models.SET_NULL,  # Changed from CASCADE to SET_NULL
