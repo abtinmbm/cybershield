@@ -64,27 +64,18 @@ CyberShield leverages several APIs and libraries to enhance its functionality:
 - **Fuse.js**: Provides efficient search functionality within the forum.
 - **Django REST Framework**: Utilized for creating APIs to handle data interactions between the frontend and backend.
 
-=======
->>>>>>> e918dce67be6cb99007b3e115df64d21e3157e38
+
 ## Authentication
 CyberShield uses Django's built-in authentication system to manage user registration, login, and permissions. This ensures secure access to the forum's features and protects user data.
 
-## Future Growth and Technical Development Goals
-- **Scalability**: Implementing load balancing and database optimization to handle increased traffic.
-- **Enhanced Security**: Adding features like two-factor authentication and advanced user activity monitoring.
-- **Mobile App**: Developing a mobile application to provide a seamless experience on smartphones and tablets.
-- **Community Features**: Introducing features like user badges, reputation points, and private messaging to foster community engagement.
-- **Profanity Filter**: Implelemnt Profanity filter library to ensure a safe environment in CyberShield
-- **Monetization Opportunities**: Introduce ads, donations to users, and subscriptions.
 
-<<<<<<< HEAD
 ## Tech Stack Explanation
 - **Django**: Chosen for its robust framework and ease of use in building secure web applications.
 - **Tailwind CSS**: Provides a utility-first approach to styling, making it easy to create responsive and modern designs.
 - **SQLite**: Used as the database for development due to its simplicity and ease of setup. Can be replaced with more scalable options like PostgreSQL for production.
 - **AWS CloudFront**: Ensures global content delivery with low latency and high transfer speeds.
-=======
-## Backend Framework
+- 
+   ## Backend Framework
 - **Django** - Python web framework that powers the application's server-side logic, models, views, and templates
 
 ## Database
@@ -111,13 +102,6 @@ CyberShield uses Django's built-in authentication system to manage user registra
 - **reCAPTCHA** - Added to login and signup forms for bot prevention
 
 ## Third-Party Services
-- **AWS CloudFront** - Content delivery network (mentioned in README)
-
-## API Architecture
-- The application implements a simple internal API for handling:
-  - User voting on posts and replies
-  - Comment submission
-  - Discussion listing and filtering
->>>>>>> e918dce67be6cb99007b3e115df64d21e3157e38
+- **AWS CloudFront** - Content delivery network 
 
 ![CyberShield](media/CyberShield.png)
