@@ -61,25 +61,45 @@ To get a local copy up and running follow these simple steps.
 
 Enjoy using CyberShield for your cybersecurity discussions!
 
-## APIs and Libraries
-CyberShield leverages several APIs and libraries to enhance its functionality:
-- **jQuery**: Used for DOM manipulation and handling AJAX requests for dynamic content updates.
-- **Fuse.js**: Provides efficient search functionality within the forum.
-- **Django REST Framework**: Utilized for creating APIs to handle data interactions between the frontend and backend.
-
-## Authentication
-CyberShield uses Django's built-in authentication system to manage user registration, login, and permissions. This ensures secure access to the forum's features and protects user data.
-
 ## Future Growth and Technical Development Goals
 - **Scalability**: Implementing load balancing and database optimization to handle increased traffic.
 - **Enhanced Security**: Adding features like two-factor authentication and advanced user activity monitoring.
 - **Mobile App**: Developing a mobile application to provide a seamless experience on smartphones and tablets.
 - **Community Features**: Introducing features like user badges, reputation points, and private messaging to foster community engagement.
 
-## Tech Stack Explanation
-- **Django**: Chosen for its robust framework and ease of use in building secure web applications.
-- **Tailwind CSS**: Provides a utility-first approach to styling, making it easy to create responsive and modern designs.
-- **SQLite**: Used as the database for development due to its simplicity and ease of setup. Can be replaced with more scalable options like PostgreSQL for production.
-- **AWS CloudFront**: Ensures global content delivery with low latency and high transfer speeds.
+## Backend Framework
+- **Django** - Python web framework that powers the application's server-side logic, models, views, and templates
+
+## Database
+- **SQLite** - Lightweight database used for development (as seen in the questions about pushing db.sqlite to GitHub)
+
+## Frontend Technologies
+- **HTML/CSS** - Standard markup and styling
+- **Tailwind CSS** - Utility-first CSS framework for responsive design
+- **JavaScript** - Client-side scripting for dynamic interactions
+
+## Python Libraries
+- **django-admin-interface** - Enhanced Django admin UI
+- **django-ckeditor-5** - Rich text editor integration for content creation
+- **django-recaptcha** - Google reCAPTCHA integration for form security
+- **Pillow** - Python Imaging Library for processing images (profile pictures, etc.)
+
+## JavaScript Libraries
+- **jQuery** - Used extensively for DOM manipulation and AJAX requests
+- **Fuse.js** - Lightweight fuzzy-search library (mentioned in README)
+
+## Security Features
+- **Django Authentication System** - Used for user registration, login, and permissions
+- **CSRF Protection** - Implemented in forms using Django's built-in protection
+- **reCAPTCHA** - Added to login and signup forms for bot prevention
+
+## Third-Party Services
+- **AWS CloudFront** - Content delivery network (mentioned in README)
+
+## API Architecture
+- The application implements a simple internal API for handling:
+  - User voting on posts and replies
+  - Comment submission
+  - Discussion listing and filtering
 
 ![CyberShield](media/CyberShield.png)
