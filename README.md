@@ -57,17 +57,14 @@ To get a local copy up and running follow these simple steps.
 
 Enjoy using CyberShield for your cybersecurity discussions!
 
-<<<<<<< HEAD
 ## APIs and Libraries
 CyberShield leverages several APIs and libraries to enhance its functionality:
 - **jQuery**: Used for DOM manipulation and handling AJAX requests for dynamic content updates.
 - **Fuse.js**: Provides efficient search functionality within the forum.
 - **Django REST Framework**: Utilized for creating APIs to handle data interactions between the frontend and backend.
 
-
 ## Authentication
 CyberShield uses Django's built-in authentication system to manage user registration, login, and permissions. This ensures secure access to the forum's features and protects user data.
-
 
 ## Tech Stack Explanation
 - **Django**: Chosen for its robust framework and ease of use in building secure web applications.
