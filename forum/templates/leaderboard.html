@@ -1,0 +1,282 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Leaderboard - CyberShield</title>
+    <!-- Favicon -->
+    <link rel="icon" href="{% static 'media/CyberShield.png' %}" type="image/png">
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- Font Awesome Icons -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --dark-blue: #0f172a;
+            --midnight: #1e293b;
+            --highlight: #3b82f6;
+        }
+        body {
+            background-color: var(--dark-blue);
+            color: #e2e8f0;
+        }
+        .trophy-gold {
+            color: #fbbf24;
+            text-shadow: 0 0 10px rgba(251, 191, 36, 0.4);
+        }
+        .trophy-silver {
+            color: #94a3b8;
+            text-shadow: 0 0 10px rgba(148, 163, 184, 0.4);
+        }
+        .trophy-bronze {
+            color: #b45309;
+            text-shadow: 0 0 10px rgba(180, 83, 9, 0.4);
+        }
+        .leaderboard-card {
+            background: linear-gradient(to bottom, #1e293b, #0f172a);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3), 0 4px 6px -2px rgba(0, 0, 0, 0.1);
+        }
+        .top-user-card {
+            transition: transform 0.3s ease;
+        }
+        .top-user-card:hover {
+            transform: translateY(-5px);
+        }
+        .rank-badge {
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            font-weight: bold;
+        }
+        /* Responsive table */
+        @media (max-width: 640px) {
+            .table-header {
+                display: none;
+            }
+            .table-row {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 0.5rem;
+                padding: 1rem;
+                margin-bottom: 1rem;
+                border-radius: 0.5rem;
+            }
+            .table-cell {
+                padding: 0.25rem 0;
+            }
+            .table-cell:before {
+                content: attr(data-label);
+                font-weight: 600;
+                margin-right: 0.5rem;
+                display: inline-block;
+            }
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col">
+    <!-- Header -->
+    <header class="bg-slate-800 py-4 px-6 shadow-lg">
+        <div class="container mx-auto flex justify-between items-center">
+            <a href="{% url 'forum_list' %}" class="flex items-center space-x-3">
+                <img src="{% static 'media/CyberShield.png' %}" alt="CyberShield Logo" class="h-10">
+                <span class="text-2xl md:text-3xl font-bold text-white tracking-wider">CYBERSHIELD</span>
+            </a>
+            <div class="flex items-center">
+                {% if user.is_authenticated %}
+                    <div class="flex items-center space-x-2 md:space-x-4">
+                        <a href="{% url 'user_profile' user.username %}" class="text-gray-300 hover:text-white border border-slate-500 rounded-md py-1 px-3 md:py-2 md:px-4 hover:bg-slate-700 transition-colors">Profile</a>
+                        <a href="{% url 'create_forum' %}" class="text-gray-300 hover:text-white border border-slate-500 rounded-md py-1 px-3 md:py-2 md:px-4 hover:bg-slate-700 transition-colors">Post</a>
+                        <a href="{% url 'logout' %}" class="text-gray-300 hover:text-white border border-slate-500 rounded-md py-1 px-3 md:py-2 md:px-4 hover:bg-slate-700 transition-colors">Logout</a>
+                    </div>
+                {% else %}
+                    <div class="flex items-center space-x-2 md:space-x-4">
+                        <a href="{% url 'login' %}" class="text-gray-300 hover:text-white border border-slate-500 rounded-md py-1 px-3 md:py-2 md:px-4 hover:bg-slate-700 transition-colors">Login</a>
+                        <a href="{% url 'signup' %}" class="bg-blue-600 hover:bg-blue-700 text-white border border-blue-700 rounded-md py-1 px-3 md:py-2 md:px-4 transition-colors">Sign Up</a>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </header>
+
+    <main class="container mx-auto flex-grow py-8 px-4 md:px-6">
+        <div class="max-w-5xl mx-auto">
+            <div class="flex justify-between items-center mb-8">
+                <h1 class="text-3xl md:text-4xl font-bold text-white">
+                    <i class="fas fa-trophy text-yellow-400 mr-2"></i> User Leaderboard
+                </h1>
+                <a href="{% url 'forum_list' %}" class="text-blue-400 hover:text-blue-300 flex items-center">
+                    <i class="fas fa-arrow-left mr-2"></i> Back to Forum
+                </a>
+            </div>
+            
+            <!-- Top 3 users -->
+            {% if user_stats|length >= 3 %}
+            <div class="mb-12">
+                <h2 class="text-xl font-semibold mb-6 text-center">Top Contributors</h2>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <!-- Second Place -->
+                    <div class="flex flex-col items-center top-user-card">
+                        <div class="relative mb-4">
+                            {% with second_user=user_stats.1 %}
+                            {% if second_user.user.profile_picture %}
+                                <img src="{{ second_user.user.profile_picture.url }}" alt="{{ second_user.user.username }}" class="w-24 h-24 rounded-full border-4 border-gray-400 object-cover">
+                            {% else %}
+                                <div class="w-24 h-24 rounded-full border-4 border-gray-400 bg-slate-700 flex items-center justify-center text-2xl font-bold">
+                                    {{ second_user.user.username|slice:":1"|upper }}
+                                </div>
+                            {% endif %}
+                            <span class="absolute -bottom-2 -right-2 bg-gray-400 text-gray-800 text-lg font-bold w-8 h-8 rounded-full flex items-center justify-center shadow-lg">2</span>
+                            {% endwith %}
+                        </div>
+                        <h3 class="font-bold text-lg">{{ user_stats.1.user.username }}</h3>
+                        <div class="text-slate-300 text-sm">{{ user_stats.1.total_likes }} likes</div>
+                        <div class="text-slate-400 text-xs">{{ user_stats.1.post_count }} posts</div>
+                    </div>
+                    
+                    <!-- First Place -->
+                    <div class="flex flex-col items-center top-user-card -mt-6">
+                        <div class="trophy-gold text-4xl mb-2">
+                            <i class="fas fa-crown"></i>
+                        </div>
+                        <div class="relative mb-4">
+                            {% with first_user=user_stats.0 %}
+                            {% if first_user.user.profile_picture %}
+                                <img src="{{ first_user.user.profile_picture.url }}" alt="{{ first_user.user.username }}" class="w-28 h-28 rounded-full border-4 border-yellow-400 object-cover">
+                            {% else %}
+                                <div class="w-28 h-28 rounded-full border-4 border-yellow-400 bg-slate-700 flex items-center justify-center text-3xl font-bold">
+                                    {{ first_user.user.username|slice:":1"|upper }}
+                                </div>
+                            {% endif %}
+                            <span class="absolute -bottom-2 -right-2 bg-yellow-400 text-yellow-800 text-xl font-bold w-10 h-10 rounded-full flex items-center justify-center shadow-lg">1</span>
+                            {% endwith %}
+                        </div>
+                        <h3 class="font-bold text-xl">{{ user_stats.0.user.username }}</h3>
+                        <div class="text-slate-300">{{ user_stats.0.total_likes }} likes</div>
+                        <div class="text-slate-400 text-sm">{{ user_stats.0.post_count }} posts</div>
+                    </div>
+                    
+                    <!-- Third Place -->
+                    <div class="flex flex-col items-center top-user-card">
+                        <div class="relative mb-4">
+                            {% with third_user=user_stats.2 %}
+                            {% if third_user.user.profile_picture %}
+                                <img src="{{ third_user.user.profile_picture.url }}" alt="{{ third_user.user.username }}" class="w-24 h-24 rounded-full border-4 border-amber-700 object-cover">
+                            {% else %}
+                                <div class="w-24 h-24 rounded-full border-4 border-amber-700 bg-slate-700 flex items-center justify-center text-2xl font-bold">
+                                    {{ third_user.user.username|slice:":1"|upper }}
+                                </div>
+                            {% endif %}
+                            <span class="absolute -bottom-2 -right-2 bg-amber-700 text-amber-100 text-lg font-bold w-8 h-8 rounded-full flex items-center justify-center shadow-lg">3</span>
+                            {% endwith %}
+                        </div>
+                        <h3 class="font-bold text-lg">{{ user_stats.2.user.username }}</h3>
+                        <div class="text-slate-300 text-sm">{{ user_stats.2.total_likes }} likes</div>
+                        <div class="text-slate-400 text-xs">{{ user_stats.2.post_count }} posts</div>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+            
+            <!-- Leaderboard Table -->
+            <div class="leaderboard-card rounded-xl overflow-hidden">
+                <div class="bg-slate-700 px-6 py-4">
+                    <div class="flex justify-between items-center">
+                        <h2 class="text-xl font-semibold">Complete Rankings</h2>
+                        <div class="text-sm text-slate-300">
+                            <i class="fas fa-info-circle mr-1"></i> Sorted by total likes received
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="overflow-x-auto">
+                    <table class="w-full">
+                        <thead class="bg-slate-800 border-b border-slate-700 table-header">
+                            <tr>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-slate-400 uppercase tracking-wider">Rank</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-slate-400 uppercase tracking-wider">User</th>
+                                <th class="px-6 py-3 text-center text-xs font-medium text-slate-400 uppercase tracking-wider">Posts</th>
+                                <th class="px-6 py-3 text-right text-xs font-medium text-slate-400 uppercase tracking-wider">Total Likes</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-700">
+                            {% for stats in user_stats %}
+                            <tr class="hover:bg-slate-700 transition-colors table-row">
+                                <td class="px-6 py-4 whitespace-nowrap table-cell" data-label="Rank">
+                                    <div class="flex items-center">
+                                        <div class="rank-badge bg-slate-700 text-slate-300">
+                                            {{ stats.rank }}
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap table-cell" data-label="User">
+                                    <div class="flex items-center">
+                                        <a href="{% url 'user_profile' stats.user.username %}" class="flex items-center hover:text-blue-400">
+                                            {% if stats.user.profile_picture %}
+                                                <img src="{{ stats.user.profile_picture.url }}" alt="{{ stats.user.username }}" class="w-10 h-10 rounded-full mr-3 object-cover">
+                                            {% else %}
+                                                <div class="w-10 h-10 bg-slate-600 rounded-full flex items-center justify-center mr-3 text-sm">
+                                                    {{ stats.user.username|slice:":1"|upper }}
+                                                </div>
+                                            {% endif %}
+                                            <div>
+                                                <div class="font-medium">{{ stats.user.username }}</div>
+                                                {% if stats.user.role == 'moderator' %}
+                                                <span class="bg-blue-700 text-xs px-2 py-0.5 rounded text-white">MOD</span>
+                                                {% endif %}
+                                            </div>
+                                        </a>
+                                    </div>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-center table-cell" data-label="Posts">
+                                    {{ stats.post_count }}
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-right font-bold table-cell" data-label="Total Likes">
+                                    {{ stats.total_likes }}
+                                </td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="4" class="px-6 py-10 text-center text-slate-400">No users with activity yet.</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                
+                {% if total_users > 20 %}
+                <div class="p-4 text-center text-sm text-slate-400 border-t border-slate-700">
+                    Showing top 20 of {{ total_users }} users with activity
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-slate-800 py-6 px-4 mt-8">
+        <div class="container mx-auto">
+          <div class="flex flex-col md:flex-row justify-between items-center">
+            <div class="mb-6 md:mb-0">
+              <p class="text-sm text-gray-400">
+                &copy; 2025 CyberShield. All rights reserved.
+              </p>
+            </div>
+            <div class="flex space-x-6">
+              <div class="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-8">
+                <a href="{% url 'leaderboard' %}" class="text-slate-400 hover:text-white">Leaderboard</a>
+                <a href="{% url 'terms_conditions' %}" class="text-slate-400 hover:text-white">Terms & Conditions</a>
+                <a href="{% url 'moderator_form' %}" class="text-slate-400 hover:text-white">Become a Moderator</a>
+            </div>
+            </div>
+          </div>
+        </div>
+      </footer>
+    </body>
+</body>
+</html>

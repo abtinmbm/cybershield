@@ -21,6 +21,7 @@ from .views import (
     vote_reply,
     edit_profile,
     change_password,
+    leaderboard,
 )
 
 urlpatterns = [
@@ -49,4 +50,5 @@ urlpatterns = [
     path("profile/edit/", edit_profile, name="edit_profile"),
     path("profile/change-password/", change_password, name="change_password"),
     path("profile/<str:username>/", user_profile, name="user_profile"),
+    path("leaderboard/", leaderboard, name="leaderboard"),
 ]

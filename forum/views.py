@@ -632,3 +632,43 @@ def change_password(request):
         form = PasswordChangeForm(request.user)
 
     return render(request, "change_password.html", {"form": form})
+
+
+# New view function for leaderboard
+def leaderboard(request):
+    # Get all users
+    users = CustomUser.objects.all()
+    
+    # Calculate likes for each user
+    user_stats = []
+    for user in users:
+        # Get likes from posts
+        post_likes = sum(post.likes.count() for post in ForumPost.objects.filter(author=user))
+        
+        # Get likes from replies
+        reply_likes = sum(reply.likes.count() for reply in ForumReply.objects.filter(author=user))
+        
+        # Total likes
+        total_likes = post_likes + reply_likes
+        
+        # Add to user stats if they have any likes or posts
+        if total_likes > 0 or ForumPost.objects.filter(author=user).exists():
+            user_stats.append({
+                'user': user,
+                'post_likes': post_likes,
+                'reply_likes': reply_likes,
+                'total_likes': total_likes,
+                'post_count': ForumPost.objects.filter(author=user).count(),
+            })
+    
+    # Sort by total likes (descending)
+    user_stats.sort(key=lambda x: x['total_likes'], reverse=True)
+    
+    # Add rank to each user
+    for i, stats in enumerate(user_stats):
+        stats['rank'] = i + 1
+    
+    return render(request, 'leaderboard.html', {
+        'user_stats': user_stats[:20],  # Top 20 users
+        'total_users': len(user_stats)
+    })

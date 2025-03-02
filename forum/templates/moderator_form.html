@@ -381,37 +381,25 @@
     </div>
 
     <!-- Footer -->
-    <footer class="bg-slate-800 py-8 px-6 mt-12">
+    <footer class="bg-slate-800 py-6 px-4 mt-8">
       <div class="container mx-auto">
         <div class="flex flex-col md:flex-row justify-between items-center">
           <div class="mb-6 md:mb-0">
-            <h2 class="text-xl font-bold text-white mb-2">CYBERSHIELD</h2>
-            <p class="text-slate-400">
-              Your secure space for cybersecurity discussions
+            <p class="text-sm text-gray-400">
+              &copy; 2025 CyberShield. All rights reserved.
             </p>
           </div>
-          <div
-            class="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-8"
-          >
-            <a
-              href="{% url 'terms_conditions' %}"
-              class="text-slate-400 hover:text-white"
-              >Terms & Conditions</a
-            >
-            <a
-              href="{% url 'moderator_form' %}"
-              class="text-slate-400 hover:text-white"
-              >Become a Moderator</a
-            >
+          <div class="flex space-x-6">
+            <div class="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-8">
+              <a href="{% url 'leaderboard' %}" class="text-slate-400 hover:text-white">Leaderboard</a>
+              <a href="{% url 'terms_conditions' %}" class="text-slate-400 hover:text-white">Terms & Conditions</a>
+              <a href="{% url 'moderator_form' %}" class="text-slate-400 hover:text-white">Become a Moderator</a>
           </div>
-        </div>
-        <div class="mt-8 pt-6 border-t border-slate-700 text-center">
-          <p class="text-slate-500">
-            &copy; {% now "Y" %} CyberShield. All rights reserved.
-          </p>
+          </div>
         </div>
       </div>
     </footer>
+  </body>
 
     <script>
       $(document).ready(function () {
