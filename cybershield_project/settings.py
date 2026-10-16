@@ -3,8 +3,9 @@ from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = "6Le1y-IqAAAAAP9K6_Gr8v7Yp_XShGY0a--JWgrv"
-DEBUG = True
+# Secrets come from environment variables; the fallback is for local development only.
+SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY", "dev-only-insecure-key")
+DEBUG = os.environ.get("DJANGO_DEBUG", "1") == "1"
 ALLOWED_HOSTS = ["127.0.0.1", "35.182.152.63", "d2r6sxfy47w9d0.cloudfront.net"]
 # CSRF Trusted Origins
 CSRF_TRUSTED_ORIGINS = ["http://localhost:8000", "http://127.0.0.1:8000", "https://d2r6sxfy47w9d0.cloudfront.net"]
@@ -97,10 +98,12 @@ STATICFILES_DIRS = [os.path.join(BASE_DIR, "static")]
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-# django-recaptcha settings (replace with your actual keys)
-RECAPTCHA_PUBLIC_KEY = "6LecF-YqAAAAAMFhyCJZgi7o-jxcO4sH8oCVG9su"
-RECAPTCHA_PRIVATE_KEY = "6LecF-YqAAAAAG_kRwtekfS1NgfnHJ8tAuQP6cPp"
+# reCAPTCHA keys come from the environment; without them django-recaptcha uses Google's test keys.
+if os.environ.get("RECAPTCHA_PUBLIC_KEY"):
+    RECAPTCHA_PUBLIC_KEY = os.environ["RECAPTCHA_PUBLIC_KEY"]
+    RECAPTCHA_PRIVATE_KEY = os.environ["RECAPTCHA_PRIVATE_KEY"]
 NOCAPTCHA = True
+SILENCED_SYSTEM_CHECKS = ["django_recaptcha.recaptcha_test_key_error"]
 
 # Set the media root and URL
 MEDIA_ROOT = os.path.join(
