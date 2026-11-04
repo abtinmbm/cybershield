@@ -7,7 +7,7 @@
 
 ## Features
 
-- **Live feed without page reloads:** threaded posts and comments, voting, topic filtering and multi-criteria sorting, served by Django REST Framework endpoints and updated with AJAX.
+- **Live feed without page reloads:** threaded posts and comments, voting, topic filtering and multi-criteria sorting, with Django views returning JSON and jQuery AJAX updating the page.
 - **Abuse protection:** Django authentication, CSRF protection on every form, reCAPTCHA on sign-up and login, and moderator roles.
 - **Typo-tolerant search:** client-side fuzzy search with Fuse.js, so partial or misspelled queries still find posts.
 - **Rich posts:** CKEditor 5 for formatted content and Pillow for profile images.
@@ -17,7 +17,7 @@
 
 | Layer | Tools |
 | --- | --- |
-| Backend | Django, Django REST Framework, SQLite (development) |
+| Backend | Django, SQLite (development) |
 | Frontend | HTML, Tailwind CSS, JavaScript, jQuery (AJAX), Fuse.js |
 | Security | Django auth, CSRF protection, django-recaptcha, moderator roles |
 | Libraries | django-admin-interface, django-ckeditor-5, Pillow |
